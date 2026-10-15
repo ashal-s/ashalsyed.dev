@@ -170,14 +170,15 @@ export function Hero() {
             <motion.a
               key={link.name}
               href={link.href}
-              target="_blank"
-              rel="noopener noreferrer"
+              {...(link.href.startsWith("mailto:")
+                ? {}
+                : { target: "_blank", rel: "noopener noreferrer" })}
               variants={fadeUpItem}
               custom={i}
               className="group"
             >
               <span className="text-foreground font-medium">{link.name}</span>
-              <span className="mx-2 text-border">/</span>
+              <span className="mx-2 text-foreground/45">/</span>
               <span className="text-muted-foreground transition-colors group-hover:text-accent">
                 {link.handle}
               </span>

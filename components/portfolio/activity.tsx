@@ -206,8 +206,8 @@ export function Activity() {
           icon: CheckCircle2,
         },
         {
-          label: "Open",
-          value: trackers.open,
+          label: "Projects",
+          value: trackers.projects,
           icon: FolderKanban,
         },
         {

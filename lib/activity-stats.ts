@@ -47,6 +47,8 @@ export type TrackerActivityStats = {
   closed: number;
   open: number;
   bugsReported: number;
+  /** Linear teams / Jira projects the user can access */
+  projects: number;
   updatedAt?: string;
 };
 
@@ -71,5 +73,6 @@ export function combinedTrackerStats(
     open: (linear?.open ?? 0) + (jira?.open ?? 0),
     bugsReported:
       (linear?.bugsReported ?? 0) + (jira?.bugsReported ?? 0),
+    projects: (linear?.projects ?? 0) + (jira?.projects ?? 0),
   };
 }

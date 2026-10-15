@@ -1,7 +1,6 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { About } from "@/components/portfolio/about";
 import { Activity } from "@/components/portfolio/activity";
 import { Contact } from "@/components/portfolio/contact";
 import { Education } from "@/components/portfolio/education";
@@ -32,7 +31,6 @@ export function HomePage() {
         <Experience />
         <Activity />
         <Skills />
-        <About />
         <Education />
         <Contact />
       </motion.main>

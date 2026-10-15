@@ -34,7 +34,6 @@ export function Contact() {
         <SectionHeader
           label="Contact"
           title="Interested in working together?"
-          description="I'm actively looking for Software Engineering opportunities. Get in touch."
         />
 
         <motion.div
@@ -85,19 +84,23 @@ export function Contact() {
             whileInView="visible"
             viewport={viewport}
           >
-            {socialLinks.map((link) => (
+            {socialLinks
+              .filter((link) => link.name !== "Email")
+              .map((link) => (
               <motion.a
                 key={link.name}
                 href={link.href}
                 target="_blank"
                 rel="noopener noreferrer"
                 variants={fadeUpItem}
-                whileHover={{ y: -4, borderColor: "hsl(var(--accent) / 0.4)" }}
-                transition={springSnappy}
-                className="rounded-lg border border-border/60 p-4 hover:bg-card/50"
+                className="group rounded-lg border border-border/60 p-4 transition-[border-color,background-color] duration-200 hover:border-foreground/40 hover:bg-card/40"
               >
-                <p className="font-medium">{link.name}</p>
-                <p className="text-sm text-muted-foreground mt-1">{link.handle}</p>
+                <p className="font-medium text-foreground transition-colors group-hover:text-accent">
+                  {link.name}
+                </p>
+                <p className="text-sm text-muted-foreground mt-1 underline decoration-transparent underline-offset-4 transition-[color,text-decoration-color] duration-200 group-hover:text-foreground group-hover:decoration-foreground/30">
+                  {link.handle}
+                </p>
               </motion.a>
             ))}
           </motion.div>

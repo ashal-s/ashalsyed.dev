@@ -17,7 +17,6 @@ export const navLinks = [
   { href: "/#experience", label: "Experience" },
   { href: "/#activity", label: "Activity" },
   { href: "/#skills", label: "Skills" },
-  { href: "/#about", label: "About" },
   { href: "/#education", label: "Education" },
   { href: "/#contact", label: "Contact" },
 ] as const;
@@ -32,6 +31,11 @@ export const socialLinks = [
     name: "LinkedIn",
     href: site.linkedin,
     handle: "ashalsyed",
+  },
+  {
+    name: "Email",
+    href: `mailto:${site.email}`,
+    handle: "@ashal.syed",
   },
 ] as const;
 
@@ -85,9 +89,19 @@ export const skillGroups = [
     name: "Backend & Data",
     skills: [
       { name: "Node.js", level: 85 },
+      { name: "FastAPI", level: 78 },
       { name: "PostgreSQL", level: 80 },
       { name: "Supabase", level: 78 },
+      { name: "Redis", level: 74 },
       { name: "REST APIs", level: 88 },
+    ],
+  },
+  {
+    name: "AI",
+    skills: [
+      { name: "LangChain", level: 78 },
+      { name: "Ollama", level: 75 },
+      { name: "OpenAI-compatible APIs", level: 76 },
     ],
   },
   {
@@ -206,7 +220,7 @@ export const nowBuilding = [
 
 export const stats = [
   { value: "3+", label: "Years in software engineering" },
-  { value: "4", label: "Professional certifications" },
+  { value: "2", label: "Professional certifications" },
   { value: "3", label: "Products in active development" },
 ] as const;
 
@@ -219,8 +233,6 @@ export const education = [
 ] as const;
 
 export const certifications = [
-  "Meta Back-End Developer Professional Certificate",
-  "AWS Certified Developer   Associate",
   "Reinvention with Agentic AI",
   "ICAgile Fundamentals",
 ] as const;

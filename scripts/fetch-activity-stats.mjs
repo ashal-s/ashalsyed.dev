@@ -8,8 +8,8 @@
  * Totals are summed year-by-year from account creation (all-time).
  * The contribution calendar is the last 12 months (GitHub API max per query).
  *
- * Linear: LINEAR_API_KEY — created / closed / open / bugs (Bug label).
- * Jira: JIRA_BASE_URL, JIRA_EMAIL, JIRA_API_TOKEN — same counters via JQL.
+ * Linear: LINEAR_API_KEY — created / closed / open / bugs / teams (spaces).
+ * Jira: JIRA_BASE_URL, JIRA_EMAIL, JIRA_API_TOKEN — same issue counters + projects.
  *
  * Without GH_STATS_TOKEN, keeps the existing data/activity-stats.json fallback
  * (or writes an empty GitHub stub) so local builds still succeed.
@@ -216,11 +216,32 @@ async function countLinearIssues(filter, { pageSize = 50, maxPages = 100 } = {})
  * Linear: issues you created / closed (completed + assigned to you) /
  * currently open / bugs you reported (Bug label).
  */
+async function countLinearTeams() {
+  let total = 0;
+  let after = null;
+  for (let page = 0; page < 50; page++) {
+    const data = await linearGraphql(
+      `query($after: String) {
+        teams(first: 50, after: $after) {
+          nodes { id }
+          pageInfo { hasNextPage endCursor }
+        }
+      }`,
+      { after }
+    );
+    const connection = data.teams;
+    total += connection.nodes.length;
+    if (!connection.pageInfo.hasNextPage) break;
+    after = connection.pageInfo.endCursor;
+  }
+  return total;
+}
+
 async function fetchLinear() {
   if (!process.env.LINEAR_API_KEY) return null;
 
   console.log("[activity-stats] Fetching Linear issue stats…");
-  const [created, closed, open, bugsReported] = await Promise.all([
+  const [created, closed, open, bugsReported, projects] = await Promise.all([
     countLinearIssues({ creator: { isMe: { eq: true } } }),
     countLinearIssues({
       assignee: { isMe: { eq: true } },
@@ -236,6 +257,7 @@ async function fetchLinear() {
       creator: { isMe: { eq: true } },
       labels: { name: { eqIgnoreCase: "Bug" } },
     }),
+    countLinearTeams(),
   ]);
 
   const stats = {
@@ -243,10 +265,11 @@ async function fetchLinear() {
     closed,
     open,
     bugsReported,
+    projects,
     updatedAt: new Date().toISOString(),
   };
   console.log(
-    `[activity-stats] Linear: ${created} created, ${closed} closed, ${open} open, ${bugsReported} bugs`
+    `[activity-stats] Linear: ${created} created, ${closed} closed, ${open} open, ${bugsReported} bugs, ${projects} teams`
   );
   return stats;
 }
@@ -282,8 +305,34 @@ async function jiraApproximateCount(baseUrl, jql) {
   return typeof json.count === "number" ? json.count : 0;
 }
 
+async function countJiraProjects(baseUrl) {
+  const res = await fetch(
+    `${baseUrl}/rest/api/3/project/search?maxResults=1&startAt=0`,
+    {
+      headers: {
+        Authorization: jiraAuthHeader(),
+        Accept: "application/json",
+      },
+    }
+  );
+  const text = await res.text();
+  let json;
+  try {
+    json = JSON.parse(text);
+  } catch {
+    throw new Error(`Jira projects HTTP ${res.status}: ${text.slice(0, 200)}`);
+  }
+  if (!res.ok) {
+    throw new Error(
+      `Jira projects HTTP ${res.status}: ${json.errorMessages?.join("; ") || text.slice(0, 200)}`
+    );
+  }
+  return typeof json.total === "number" ? json.total : (json.values?.length ?? 0);
+}
+
 /**
- * Jira Cloud: reporter / assignee Done / open / Bug issuetype via approximate-count.
+ * Jira Cloud: reporter / assignee Done / open / Bug issuetype via approximate-count,
+ * plus accessible project count.
  */
 async function fetchJira() {
   if (
@@ -311,16 +360,18 @@ async function fetchJira() {
     ])
   );
   const counts = Object.fromEntries(entries);
+  const projects = await countJiraProjects(baseUrl);
 
   const stats = {
     created: counts.created,
     closed: counts.closed,
     open: counts.open,
     bugsReported: counts.bugsReported,
+    projects,
     updatedAt: new Date().toISOString(),
   };
   console.log(
-    `[activity-stats] Jira: ${stats.created} created, ${stats.closed} closed, ${stats.open} open, ${stats.bugsReported} bugs`
+    `[activity-stats] Jira: ${stats.created} created, ${stats.closed} closed, ${stats.open} open, ${stats.bugsReported} bugs, ${projects} projects`
   );
   return stats;
 }

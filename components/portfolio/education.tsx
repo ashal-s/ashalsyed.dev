@@ -5,7 +5,6 @@ import { GraduationCap } from "lucide-react";
 import {
   fadeUpItem,
   scaleIn,
-  springSmooth,
   staggerContainer,
   viewport,
 } from "@/lib/motion";
@@ -16,7 +15,7 @@ export function Education() {
   return (
     <section id="education" className="py-24 px-6 scroll-mt-20">
       <div className="max-w-5xl mx-auto">
-        <SectionHeader label="Education" title="Education" />
+        <SectionHeader label="Education" title="Where I studied" />
 
         <motion.div
           initial="hidden"
@@ -29,8 +28,6 @@ export function Education() {
             <motion.div
               key={item.degree}
               variants={scaleIn}
-              whileHover={{ y: -4 }}
-              transition={springSmooth}
               className="rounded-xl border border-border/80 bg-card/40 p-6 flex items-start gap-4"
             >
               <div className="p-2.5 rounded-lg bg-accent/10 text-accent">
