@@ -1,6 +1,6 @@
 export const site = {
   name: "Ashal Syed",
-  domain: "ashalsyed.dev",
+  domain: "AshalSyed.dev",
   title: "Software Engineer",
   tagline:
     "I build software end to end: frontend, backend, databases, infrastructure, testing, and AI features.",

@@ -3,7 +3,7 @@ import type { Metadata } from "next";
 import { ThemeProvider } from "@/components/theme-provider";
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://ashalsyed.dev"),
+  metadataBase: new URL("https://AshalSyed.dev"),
   title: "Ashal Syed   Software Engineer",
   description:
     "Portfolio of Ashal Syed, a Melbourne-based software engineer building full-stack products end to end, including GraphOrg and Mafia.",
@@ -11,8 +11,8 @@ export const metadata: Metadata = {
     title: "Ashal Syed   Software Engineer",
     description:
       "Building full-stack products end to end: frontend, backend, databases, infrastructure and testing.",
-    url: "https://ashalsyed.dev",
-    siteName: "ashalsyed.dev",
+    url: "https://AshalSyed.dev",
+    siteName: "AshalSyed.dev",
     type: "website",
   },
 };

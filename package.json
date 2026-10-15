@@ -1,8 +1,8 @@
 {
-  "name": "ashalsyed.dev",
+  "name": "AshalSyed.dev",
   "version": "1.0.0",
   "private": true,
-  "homepage": "https://ashalsyed.dev",
+  "homepage": "https://AshalSyed.dev",
   "scripts": {
     "dev": "next dev",
     "predev": "node scripts/fetch-activity-stats.mjs",

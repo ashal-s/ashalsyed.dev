@@ -118,7 +118,7 @@ async function githubGraphql(token, query, variables) {
     headers: {
       Authorization: `Bearer ${token}`,
       "Content-Type": "application/json",
-      "User-Agent": "ashalsyed.dev-activity-stats",
+      "User-Agent": "AshalSyed.dev-activity-stats",
     },
     body: JSON.stringify({ query, variables }),
   });
