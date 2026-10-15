@@ -3,23 +3,17 @@
 import { motion } from "framer-motion";
 import type { LucideIcon } from "lucide-react";
 import {
+  Activity as ActivityIcon,
   Bug,
   CheckCircle2,
-  CircleDot,
-  Eye,
   FolderKanban,
-  GitCommitHorizontal,
-  GitPullRequestArrow,
+  GitCommit,
+  GitPullRequest,
+  MessageSquareCode,
   PlusCircle,
-  Sparkles,
 } from "lucide-react";
 import { useState } from "react";
-import {
-  fadeUpItem,
-  springSnappy,
-  staggerContainer,
-  viewport,
-} from "@/lib/motion";
+import { fadeUpItem, staggerContainer, viewport } from "@/lib/motion";
 import {
   activityStats,
   combinedTrackerStats,
@@ -37,17 +31,8 @@ const LEVEL_CLASS: Record<number, string> = {
   4: "bg-contrib-4 border border-contrib-4",
 };
 
-function formatUpdated(iso: string) {
-  try {
-    return new Intl.DateTimeFormat("en-AU", {
-      day: "numeric",
-      month: "short",
-      year: "numeric",
-    }).format(new Date(iso));
-  } catch {
-    return iso.slice(0, 10);
-  }
-}
+const CELL = "h-[10px] w-[10px] sm:h-[11px] sm:w-[11px]";
+const WEEKDAY_GUTTER = "w-7 shrink-0";
 
 function formatCount(n: number) {
   return new Intl.NumberFormat("en-AU").format(n);
@@ -73,21 +58,32 @@ function contributionLabel(day: ContributionDay) {
   return `${countText} on ${formatDayLabel(day.date)}`;
 }
 
+/** Label the week column that contains the 1st of a month. */
 function monthLabels(weeks: GithubActivityStats["calendar"]["weeks"]) {
   const labels: { label: string; weekIndex: number }[] = [];
-  let lastMonth = "";
   weeks.forEach((week, weekIndex) => {
-    const first = week.contributionDays[0];
-    if (!first) return;
-    const month = new Date(`${first.date}T00:00:00`).toLocaleString("en-AU", {
-      month: "short",
+    const firstOfMonth = week.contributionDays.find((day) => {
+      const d = new Date(`${day.date}T12:00:00`);
+      return d.getDate() === 1;
     });
-    if (month !== lastMonth) {
-      labels.push({ label: month, weekIndex });
-      lastMonth = month;
-    }
+    if (!firstOfMonth) return;
+    const label = new Date(`${firstOfMonth.date}T12:00:00`).toLocaleString(
+      "en-AU",
+      { month: "short" }
+    );
+    labels.push({ label, weekIndex });
   });
   return labels;
+}
+
+function yearContributionTotal(
+  weeks: GithubActivityStats["calendar"]["weeks"]
+) {
+  return weeks.reduce(
+    (sum, week) =>
+      sum + week.contributionDays.reduce((daySum, day) => daySum + day.count, 0),
+    0
+  );
 }
 
 function DayCell({
@@ -110,7 +106,7 @@ function DayCell({
       onMouseLeave={onLeave}
       onFocus={(e) => onEnter(day, e.currentTarget)}
       onBlur={onLeave}
-      className={`block h-[10px] w-[10px] sm:h-[11px] sm:w-[11px] shrink-0 rounded-[2px] outline-none transition-shadow ${
+      className={`block ${CELL} shrink-0 rounded-[2px] outline-none transition-shadow ${
         LEVEL_CLASS[day.level] ?? LEVEL_CLASS[0]
       } ${active ? "ring-1 ring-foreground/80 ring-offset-1 ring-offset-card" : "hover:ring-1 hover:ring-foreground/50"}`}
     />
@@ -121,18 +117,14 @@ function StatCard({
   label,
   value,
   icon: Icon,
-  hint,
 }: {
   label: string;
   value: number;
   icon: LucideIcon;
-  hint?: string;
 }) {
   return (
     <motion.div
       variants={fadeUpItem}
-      whileHover={{ y: -4, borderColor: "hsl(var(--accent) / 0.4)" }}
-      transition={springSnappy}
       className="rounded-xl border border-border/80 bg-card/40 p-4 sm:p-5"
     >
       <div className="flex items-center gap-2 text-muted-foreground mb-2">
@@ -142,21 +134,17 @@ function StatCard({
       <p className="text-2xl sm:text-3xl font-bold font-mono text-foreground tabular-nums">
         {formatCount(value)}
       </p>
-      {hint ? (
-        <p className="mt-1.5 text-[11px] text-muted-foreground font-mono leading-snug">
-          {hint}
-        </p>
-      ) : null}
     </motion.div>
   );
 }
 
 export function Activity() {
-  const { github, updatedAt, linear, jira } = activityStats;
+  const { github, linear, jira } = activityStats;
   const trackers = combinedTrackerStats(linear, jira);
   const weeks = github.calendar.weeks;
   const hasCalendar = weeks.length > 0;
   const months = hasCalendar ? monthLabels(weeks) : [];
+  const yearTotal = hasCalendar ? yearContributionTotal(weeks) : 0;
   const profileUrl = `https://github.com/${github.login}`;
   const [tooltip, setTooltip] = useState<{
     text: string;
@@ -186,27 +174,22 @@ export function Activity() {
     {
       label: "Contributions",
       value: github.totalContributions,
-      icon: Sparkles,
+      icon: ActivityIcon,
     },
     {
       label: "Commits",
       value: github.commits,
-      icon: GitCommitHorizontal,
-    },
-    {
-      label: "Issues",
-      value: github.issues,
-      icon: CircleDot,
+      icon: GitCommit,
     },
     {
       label: "Pull requests",
       value: github.pullRequests,
-      icon: GitPullRequestArrow,
+      icon: GitPullRequest,
     },
     {
       label: "Code reviews",
       value: github.codeReviews,
-      icon: Eye,
+      icon: MessageSquareCode,
     },
   ];
 
@@ -216,37 +199,21 @@ export function Activity() {
           label: "Created",
           value: trackers.created,
           icon: PlusCircle,
-          hint:
-            linear && jira
-              ? `Linear ${formatCount(linear.created)} · Jira ${formatCount(jira.created)}`
-              : undefined,
         },
         {
           label: "Closed",
           value: trackers.closed,
           icon: CheckCircle2,
-          hint:
-            linear && jira
-              ? `Linear ${formatCount(linear.closed)} · Jira ${formatCount(jira.closed)}`
-              : undefined,
         },
         {
           label: "Open",
           value: trackers.open,
           icon: FolderKanban,
-          hint:
-            linear && jira
-              ? `Linear ${formatCount(linear.open)} · Jira ${formatCount(jira.open)}`
-              : undefined,
         },
         {
           label: "Bugs reported",
           value: trackers.bugsReported,
           icon: Bug,
-          hint:
-            linear && jira
-              ? `Linear ${formatCount(linear.bugsReported)} · Jira ${formatCount(jira.bugsReported)}`
-              : undefined,
         },
       ]
     : [];
@@ -260,35 +227,40 @@ export function Activity() {
       <div className="max-w-5xl mx-auto">
         <SectionHeader
           label="Activity"
-          title="GitHub activity"
-          description="All-time contributions, commits, issues, pull requests and reviews: plus the last 12 months on the calendar."
+          title="What I've been contributing"
         />
 
-        <motion.div
-          className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3 mb-8"
-          initial="hidden"
-          whileInView="visible"
-          viewport={viewport}
-          variants={staggerContainer}
-        >
-          {githubCounters.map((stat) => (
-            <StatCard key={stat.label} {...stat} />
-          ))}
-        </motion.div>
+        <div className="mb-8">
+          <div className="mb-4">
+            <h3 className="text-lg sm:text-xl font-semibold text-foreground">
+              GitHub
+            </h3>
+            <p className="mt-1 text-sm text-muted-foreground max-w-2xl">
+              All-time contributions, commits, pull requests and reviews.
+            </p>
+          </div>
+
+          <motion.div
+            className="grid grid-cols-2 lg:grid-cols-4 gap-3"
+            initial="hidden"
+            whileInView="visible"
+            viewport={viewport}
+            variants={staggerContainer}
+          >
+            {githubCounters.map((stat) => (
+              <StatCard key={stat.label} {...stat} />
+            ))}
+          </motion.div>
+        </div>
 
         {trackers && (
           <div className="mb-8">
             <div className="mb-4">
-              <p className="font-mono text-xs uppercase tracking-wider text-accent mb-1">
-                Issue trackers
-              </p>
               <h3 className="text-lg sm:text-xl font-semibold text-foreground">
                 Linear &amp; Jira
               </h3>
               <p className="mt-1 text-sm text-muted-foreground max-w-2xl">
-                Combined task activity across {trackerSources}: created by you,
-                closed while assigned to you, currently open, and bugs you
-                reported.
+                Combined task activity across {trackerSources}.
               </p>
             </div>
 
@@ -315,7 +287,7 @@ export function Activity() {
         >
           <div className="flex items-center justify-between gap-4 mb-4 min-w-[640px]">
             <p className="font-mono text-xs text-muted-foreground">
-              ~/github   contribution calendar
+              GitHub contribution calendar
             </p>
             <a
               href={profileUrl}
@@ -343,24 +315,31 @@ export function Activity() {
                 </div>
               )}
 
-              <div
-                className="grid gap-[3px] mb-1 text-[10px] text-muted-foreground font-mono"
-                style={{
-                  gridTemplateColumns: `repeat(${weeks.length}, minmax(0, 1fr))`,
-                }}
-              >
-                {weeks.map((_, weekIndex) => {
-                  const month = months.find((m) => m.weekIndex === weekIndex);
-                  return (
-                    <span key={weekIndex} className="h-4 overflow-visible">
-                      {month ? month.label : ""}
-                    </span>
-                  );
-                })}
+              <div className="flex gap-2 mb-1">
+                <div className={WEEKDAY_GUTTER} aria-hidden />
+                <div className="flex gap-[3px]">
+                  {weeks.map((_, weekIndex) => {
+                    const month = months.find((m) => m.weekIndex === weekIndex);
+                    return (
+                      <span
+                        key={weekIndex}
+                        className={`${CELL} relative shrink-0 overflow-visible text-[10px] text-muted-foreground font-mono leading-none`}
+                      >
+                        {month ? (
+                          <span className="absolute left-0 top-0 whitespace-nowrap">
+                            {month.label}
+                          </span>
+                        ) : null}
+                      </span>
+                    );
+                  })}
+                </div>
               </div>
 
               <div className="flex gap-2">
-                <div className="flex flex-col justify-between py-[1px] text-[10px] text-muted-foreground font-mono leading-none h-[82px] sm:h-[90px]">
+                <div
+                  className={`${WEEKDAY_GUTTER} flex flex-col justify-between py-[1px] text-[10px] text-muted-foreground font-mono leading-none h-[82px] sm:h-[90px]`}
+                >
                   <span />
                   <span>Mon</span>
                   <span />
@@ -388,9 +367,11 @@ export function Activity() {
               </div>
 
               <div className="mt-4 flex flex-wrap items-center justify-between gap-3 text-xs text-muted-foreground">
-                <p>
-                  Calendar: last 12 months · Totals: all time · updated{" "}
-                  {formatUpdated(updatedAt)}
+                <p className="font-mono">
+                  <span className="text-accent font-medium">
+                    {formatCount(yearTotal)}
+                  </span>{" "}
+                  contributions in the last year
                 </p>
                 <div className="flex items-center gap-1.5 font-mono">
                   <span>Less</span>
