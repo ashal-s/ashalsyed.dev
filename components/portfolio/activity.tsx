@@ -35,43 +35,62 @@ const CELL = "h-[10px] w-[10px] sm:h-[11px] sm:w-[11px]";
 const WEEKDAY_GUTTER = "w-7 shrink-0";
 
 function formatCount(n: number) {
-  return new Intl.NumberFormat("en-AU").format(n);
+  return new Intl.NumberFormat("en-US").format(n);
 }
 
-function formatDayLabel(isoDate: string) {
-  try {
-    return new Intl.DateTimeFormat("en-AU", {
-      weekday: "short",
-      day: "numeric",
-      month: "short",
-      year: "numeric",
-    }).format(new Date(`${isoDate}T12:00:00`));
-  } catch {
-    return isoDate;
-  }
+/** Fixed labels so SSR and the browser never diverge (en-AU can emit "June"/"Sept"). */
+const MONTH_SHORT = [
+  "Jan",
+  "Feb",
+  "Mar",
+  "Apr",
+  "May",
+  "Jun",
+  "Jul",
+  "Aug",
+  "Sep",
+  "Oct",
+  "Nov",
+  "Dec",
+] as const;
+
+const WEEKDAY_SHORT = [
+  "Sun",
+  "Mon",
+  "Tue",
+  "Wed",
+  "Thu",
+  "Fri",
+  "Sat",
+] as const;
+
+function formatDayLabel(isoDate: string, weekday?: number) {
+  const [year, month, day] = isoDate.split("-").map(Number);
+  if (!year || !month || !day) return isoDate;
+  const wd =
+    typeof weekday === "number"
+      ? weekday
+      : new Date(Date.UTC(year, month - 1, day, 12)).getUTCDay();
+  return `${WEEKDAY_SHORT[wd]}, ${day} ${MONTH_SHORT[month - 1]} ${year}`;
 }
 
 function contributionLabel(day: ContributionDay) {
   const n = day.count;
   const countText =
     n === 0 ? "No contributions" : `${n} contribution${n === 1 ? "" : "s"}`;
-  return `${countText} on ${formatDayLabel(day.date)}`;
+  return `${countText} on ${formatDayLabel(day.date, day.weekday)}`;
 }
 
 /** Label the week column that contains the 1st of a month. */
 function monthLabels(weeks: GithubActivityStats["calendar"]["weeks"]) {
   const labels: { label: string; weekIndex: number }[] = [];
   weeks.forEach((week, weekIndex) => {
-    const firstOfMonth = week.contributionDays.find((day) => {
-      const d = new Date(`${day.date}T12:00:00`);
-      return d.getDate() === 1;
-    });
-    if (!firstOfMonth) return;
-    const label = new Date(`${firstOfMonth.date}T12:00:00`).toLocaleString(
-      "en-AU",
-      { month: "short" }
+    const firstOfMonth = week.contributionDays.find(
+      (day) => Number(day.date.slice(8, 10)) === 1
     );
-    labels.push({ label, weekIndex });
+    if (!firstOfMonth) return;
+    const month = Number(firstOfMonth.date.slice(5, 7)) - 1;
+    labels.push({ label: MONTH_SHORT[month], weekIndex });
   });
   return labels;
 }

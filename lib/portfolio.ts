@@ -215,6 +215,7 @@ export const experience = [
 
 export const nowBuilding = [
   "GraphOrg   Org knowledge platform · latest: page-aware AI assistant and multi-tenant org chart",
+  "Graafex   Creative studio marketing site · latest: film-first portfolio and data-driven case studies",
   "Mafia Minds   Multiplayer social-deduction platform · latest: building out the voting system and timed game phases",
 ] as const;
 
