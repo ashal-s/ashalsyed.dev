@@ -40,8 +40,13 @@ function buildLlmText(): string {
   lines.push("## Projects");
   for (const project of projects) {
     if (project.hidden) continue;
-    const link =
-      project.href ?? project.caseStudyHref ?? `https://${site.domain}`;
+    const caseStudy =
+      "caseStudyHref" in project && typeof project.caseStudyHref === "string"
+        ? project.caseStudyHref.startsWith("http")
+          ? project.caseStudyHref
+          : `${base}${project.caseStudyHref}`
+        : null;
+    const link = project.href ?? caseStudy ?? base;
     lines.push(
       `- [${project.title}](${link}) (${project.year}): ${project.summary}`
     );
