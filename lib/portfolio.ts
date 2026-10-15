@@ -124,7 +124,7 @@ export const projects = [
     title: "GraphOrg",
     subtitle: "Organisation knowledge platform with a page-aware AI assistant",
     summary:
-      "Multi-tenant org charts for people, teams and departments — plus a page-aware AI assistant that answers only from the data on the page you’re viewing.",
+      "Multi-tenant org charts for people, teams and departments: plus a page-aware AI assistant that answers only from the data on the page you’re viewing.",
     description:
       "GraphOrg is a multi-tenant web app that models people, teams and departments with relationships, renders them as an org chart, and lets each user ask an AI assistant questions about the page they’re looking at, answered only from that page’s data.",
     tags: ["Next.js", "TypeScript", "PostgreSQL", "FastAPI", "Ollama"],
@@ -132,13 +132,13 @@ export const projects = [
     github: null,
     caseStudyHref: "/projects/graphorg",
     featured: true,
-    year: "2025 — Present",
+    year: "2025: Present",
   },
   {
     title: "Mafia",
     subtitle: "Multiplayer social-deduction platform",
     summary:
-      "Real-time multiplayer Mafia with roles, timed phases, private chat, and server-enforced game rules — built for actual games, not demos.",
+      "Real-time multiplayer Mafia with roles, timed phases, private chat, and server-enforced game rules: built for actual games, not demos.",
     description:
       "A long-form multiplayer Mafia platform supporting games with multiple roles, timed phases, private communication, voting and automated game management, built for real games with real people rather than a tech demo.",
     tags: ["Next.js", "TypeScript", "Supabase", "Vercel"],
@@ -146,7 +146,7 @@ export const projects = [
     github: null,
     caseStudyHref: "/projects/mafia",
     featured: false,
-    year: "2025 — Present",
+    year: "2025: Present",
   },
   {
     title: "Pachrukhi",

@@ -142,7 +142,7 @@ export const caseStudies: CaseStudy[] = [
       {
         title: "Silent context truncation",
         detail:
-          "Ollama defaults to a 4,096-token window and drops the overflow — the model answers wrong without warning. I raised the window and derived the app’s limits from it so they change together.",
+          "Ollama defaults to a 4,096-token window and drops the overflow: the model answers wrong without warning. I raised the window and derived the app’s limits from it so they change together.",
       },
       {
         title: "Concurrency in “primary team” rules",
@@ -200,7 +200,7 @@ export const caseStudies: CaseStudy[] = [
     ],
     draft: true,
     href: null,
-    lead: "Mafia only works when some players know things others don’t — and that asymmetry has to hold against anyone who opens DevTools.",
+    lead: "Mafia only works when some players know things others don’t: and that asymmetry has to hold against anyone who opens DevTools.",
     context: [
       {
         label: "Asymmetric information",
@@ -219,7 +219,7 @@ export const caseStudies: CaseStudy[] = [
       },
     ],
     outcome:
-      "A real-time multiplayer platform modelled as games, players, roles, phases, actions, votes and chats — with every privilege enforced server-side and state pushed live over Supabase.",
+      "A real-time multiplayer platform modelled as games, players, roles, phases, actions, votes and chats: with every privilege enforced server-side and state pushed live over Supabase.",
     stack: [
       {
         label: "Client",
@@ -231,7 +231,7 @@ export const caseStudies: CaseStudy[] = [
       },
       {
         label: "Data model",
-        detail: "Relational tables with FKs — not a single game-state blob",
+        detail: "Relational tables with FKs: not a single game-state blob",
       },
       {
         label: "Authorization",
@@ -268,7 +268,7 @@ export const caseStudies: CaseStudy[] = [
       },
     ],
     takeaway:
-      "Design authorization at the data layer first; the UI is a convenience on top. Shared realtime state needs a single server source of truth — clients are views that can be stale, and must be reconciled rather than trusted.",
+      "Design authorization at the data layer first; the UI is a convenience on top. Shared realtime state needs a single server source of truth: clients are views that can be stale, and must be reconciled rather than trusted.",
   },
 ];
 

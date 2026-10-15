@@ -18,10 +18,7 @@ export function ThemeToggle({ className = "" }: { className?: string }) {
 
   if (!mounted) {
     return (
-      <div
-        className={`h-9 w-9 rounded-lg border border-foreground/40 ${className}`}
-        aria-hidden
-      />
+      <div className={`h-9 w-9 rounded-lg ${className}`} aria-hidden />
     );
   }
 
@@ -38,7 +35,7 @@ export function ThemeToggle({ className = "" }: { className?: string }) {
       type="button"
       onClick={cycleTheme}
       whileTap={buttonTap}
-      className={`inline-flex h-9 w-9 items-center justify-center rounded-lg border border-foreground text-foreground bg-transparent transition-[border-width,box-shadow] duration-300 ease-out hover:border-2 hover:shadow-[0_0_0_1px_hsl(var(--foreground)/0.25),0_12px_28px_-10px_hsl(var(--foreground)/0.45)] ${className}`}
+      className={`group inline-flex h-9 w-9 items-center justify-center rounded-lg text-foreground bg-transparent focus-visible:outline focus-visible:outline-2 focus-visible:outline-foreground/30 focus-visible:outline-offset-2 ${className}`}
       aria-label={label}
       title={label}
     >
@@ -52,9 +49,15 @@ export function ThemeToggle({ className = "" }: { className?: string }) {
           className="flex items-center justify-center"
         >
           {isDark ? (
-            <Moon className="h-4 w-4" aria-hidden />
+            <Moon
+              className="h-4 w-4 fill-transparent transition-[fill] duration-300 ease-out group-hover:fill-current"
+              aria-hidden
+            />
           ) : (
-            <Sun className="h-4 w-4" aria-hidden />
+            <Sun
+              className="h-4 w-4 fill-transparent transition-[fill] duration-300 ease-out group-hover:fill-current"
+              aria-hidden
+            />
           )}
         </motion.span>
       </AnimatePresence>

@@ -261,7 +261,7 @@ export function Activity() {
         <SectionHeader
           label="03   Activity"
           title="GitHub activity"
-          description="All-time contributions, commits, issues, pull requests and reviews — plus the last 12 months on the calendar."
+          description="All-time contributions, commits, issues, pull requests and reviews: plus the last 12 months on the calendar."
         />
 
         <motion.div

@@ -1,7 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { ArrowRight, Github } from "lucide-react";
+import { ArrowRight, ArrowUpRight, Github } from "lucide-react";
 import Link from "next/link";
 import { fadeUpItem, staggerContainer, viewport } from "@/lib/motion";
 import { projects } from "@/lib/portfolio";
@@ -10,10 +10,33 @@ import { SectionHeader } from "./section-header";
 
 function displayUrl(href: string) {
   try {
-    return new URL(href).hostname;
+    return new URL(href).hostname.replace(/^www\./, "");
   } catch {
-    return href.replace(/^https?:\/\//, "");
+    return href.replace(/^https?:\/\//, "").replace(/^www\./, "");
   }
+}
+
+function LiveLink({
+  href,
+  className = "",
+}: {
+  href: string;
+  className?: string;
+}) {
+  return (
+    <a
+      href={href}
+      target="_blank"
+      rel="noopener noreferrer"
+      className={`group inline-flex items-center gap-1.5 font-mono text-sm tracking-wide text-foreground underline decoration-foreground/25 underline-offset-[5px] transition-[color,text-decoration-color] duration-300 ease-out hover:text-accent hover:decoration-accent ${className}`}
+    >
+      {displayUrl(href)}
+      <ArrowUpRight
+        className="h-3.5 w-3.5 shrink-0 opacity-60 transition-[opacity,transform] duration-300 ease-out group-hover:translate-x-0.5 group-hover:-translate-y-0.5 group-hover:opacity-100"
+        aria-hidden
+      />
+    </a>
+  );
 }
 
 export function Projects() {
@@ -23,11 +46,7 @@ export function Projects() {
   return (
     <section id="projects" className="py-24 px-6 scroll-mt-20">
       <div className="max-w-5xl mx-auto">
-        <SectionHeader
-          label="01   Projects"
-          title="Selected work"
-          description="What I built, why it matters, and where to dig deeper."
-        />
+        <SectionHeader title="Projects" />
 
         {featured && (
           <motion.div
@@ -71,31 +90,25 @@ function FeaturedProject({ project }: { project: Project }) {
       variants={fadeUpItem}
       className="rounded-2xl border border-border/80 bg-gradient-to-br from-card/80 to-accent/5 p-6 md:p-8"
     >
-      <p className="font-mono text-xs text-accent uppercase tracking-wider mb-4">
-        Featured
-      </p>
-
       <div className="flex flex-col gap-6 md:flex-row md:items-start md:justify-between md:gap-10">
         <div className="min-w-0 flex-1">
-          <div className="flex flex-wrap items-baseline gap-x-4 gap-y-1 mb-3">
-            <h3 className="text-2xl md:text-3xl font-semibold tracking-tight text-foreground">
-              {project.title}
-            </h3>
-            <span className="font-mono text-xs text-muted-foreground">
-              {project.year}
-            </span>
-          </div>
+          <h3 className="text-2xl md:text-3xl font-semibold tracking-tight text-foreground mb-3">
+            {project.title}
+          </h3>
 
           <p className="text-sm font-medium text-accent/90 mb-2">
             {project.subtitle}
           </p>
-          <p className="text-muted-foreground leading-relaxed max-w-xl text-base">
+          <p className="text-foreground leading-relaxed max-w-xl text-base">
             {project.summary}
           </p>
 
-          <ul className="flex flex-wrap gap-x-3 gap-y-1 mt-5">
+          <ul className="flex flex-wrap gap-2 mt-5">
             {project.tags.map((tag) => (
-              <li key={tag} className="font-mono text-xs text-muted-foreground">
+              <li
+                key={tag}
+                className="inline-flex items-center rounded-md border border-border/80 bg-muted/40 px-2.5 py-1 font-mono text-xs text-foreground"
+              >
                 {tag}
               </li>
             ))}
@@ -116,17 +129,8 @@ function FeaturedProject({ project }: { project: Project }) {
             </PrimaryButton>
           )}
 
-          <div className="flex flex-wrap items-center gap-3 md:justify-end">
-            {hasLive && project.href && (
-              <a
-                href={project.href}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="font-mono text-sm text-accent underline underline-offset-4 decoration-accent/50 hover:decoration-accent transition-colors"
-              >
-                {displayUrl(project.href)}
-              </a>
-            )}
+          <div className="flex flex-wrap items-center gap-4 md:justify-end">
+            {hasLive && project.href && <LiveLink href={project.href} />}
             {hasGithub && project.github && (
               <a
                 href={project.github}
@@ -155,20 +159,18 @@ function ProjectRow({ project }: { project: Project }) {
     <motion.li variants={fadeUpItem} className="py-6 md:py-7">
       <div className="flex flex-col gap-4 md:flex-row md:items-start md:justify-between md:gap-10">
         <div className="min-w-0 flex-1">
-          <div className="flex flex-wrap items-baseline gap-x-3 gap-y-1 mb-1.5">
-            <h3 className="text-lg font-semibold tracking-tight text-foreground">
-              {project.title}
-            </h3>
-            <span className="font-mono text-xs text-muted-foreground">
-              {project.year}
-            </span>
-          </div>
-          <p className="text-sm text-muted-foreground leading-relaxed max-w-xl">
+          <h3 className="text-lg font-semibold tracking-tight text-foreground mb-1.5">
+            {project.title}
+          </h3>
+          <p className="text-sm text-foreground leading-relaxed max-w-xl">
             {project.summary}
           </p>
-          <ul className="flex flex-wrap gap-x-3 gap-y-1 mt-3">
+          <ul className="flex flex-wrap gap-2 mt-3">
             {project.tags.map((tag) => (
-              <li key={tag} className="font-mono text-xs text-muted-foreground/80">
+              <li
+                key={tag}
+                className="inline-flex items-center rounded-md border border-border/80 bg-muted/40 px-2.5 py-1 font-mono text-xs text-foreground"
+              >
                 {tag}
               </li>
             ))}
@@ -185,16 +187,7 @@ function ProjectRow({ project }: { project: Project }) {
               <ArrowRight className="w-3.5 h-3.5" aria-hidden />
             </Link>
           )}
-          {hasLive && project.href && (
-            <a
-              href={project.href}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="font-mono text-sm text-accent underline underline-offset-4 decoration-accent/50 hover:decoration-accent transition-colors"
-            >
-              {displayUrl(project.href)}
-            </a>
-          )}
+          {hasLive && project.href && <LiveLink href={project.href} />}
           {hasGithub && project.github && (
             <a
               href={project.github}
