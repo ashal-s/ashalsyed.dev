@@ -202,14 +202,14 @@ export const experience = [
     role: "Software Prod & Platform Engineering Analyst",
     company: "Accenture",
     description:
-      "Contributing to enterprise platform delivery for the Australian Taxation Office's PayDay Super project. Designing manual and automated test solutions, writing database queries for validation and defect investigation, and running end-to-end integration testing across interconnected services. Working closely with developers and system designers within a disciplined Azure DevOps agile framework across enterprise systems.",
+      "Contributing to enterprise software delivery for the Australian Taxation Office's PayDay Super project. Working across backend validation, database queries, system integration, defect investigation and end-to-end testing of interconnected services. Collaborating with developers and engineers throughout Agile delivery cycles to support system reliability and production readiness.",
   },
   {
     period: "Jan 2024 - Sep 2025",
     role: "Software Engineer",
     company: "Webifex Labs",
     description:
-      "Delivered production full-stack Next.js applications end to end: REST APIs and backend services in Node.js and Express, PostgreSQL and MongoDB schema design, secure authentication and payment integrations, and CI/CD pipelines in GitHub Actions. Owned features from Figma handoff through cloud deployment and production support.",
+      "Developed and delivered production full-stack applications for external clients, translating business requirements into scalable software solutions. Built RESTful APIs, backend services and database architectures using Node.js, Express.js, PostgreSQL and MongoDB, alongside React and Next.js interfaces. Owned features from design through deployment, including authentication, payment integrations, CI/CD workflows and production support.",
   },
 ] as const;
 
