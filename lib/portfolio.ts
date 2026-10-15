@@ -127,25 +127,42 @@ export const projects = [
       "Multi-tenant org charts for people, teams and departments: plus a page-aware AI assistant that answers only from the data on the page you’re viewing.",
     description:
       "GraphOrg is a multi-tenant web app that models people, teams and departments with relationships, renders them as an org chart, and lets each user ask an AI assistant questions about the page they’re looking at, answered only from that page’s data.",
-    tags: ["Next.js", "TypeScript", "PostgreSQL", "FastAPI", "Ollama"],
+    tags: ["Python", "TypeScript", "Next.js", "PostgreSQL", "FastAPI", "Ollama"],
     href: "https://www.graphorg.com",
     github: null,
     caseStudyHref: "/projects/graphorg",
     featured: true,
+    hidden: false,
     year: "2025: Present",
   },
   {
-    title: "Mafia",
+    title: "Graafex",
+    subtitle: "Creative studio marketing site for strategy, design and film",
+    summary:
+      "A film-first marketing site with scroll-driven motion, a hover-play portfolio, and data-driven case study pages for a creative studio.",
+    description:
+      "Graafex is the marketing site for a creative studio focused on strategy, design and film: video hero, portfolio grid, and per-project case study pages built as data so new work ships without new templates.",
+    tags: ["Next.js", "TypeScript", "React", "Tailwind CSS", "Motion"],
+    href: "https://graafex.com",
+    github: null,
+    caseStudyHref: "/projects/graafex",
+    featured: false,
+    hidden: false,
+    year: "2025: Present",
+  },
+  {
+    title: "Mafia Minds",
     subtitle: "Multiplayer social-deduction platform",
     summary:
       "Real-time multiplayer Mafia with roles, timed phases, private chat, and server-enforced game rules: built for actual games, not demos.",
     description:
       "A long-form multiplayer Mafia platform supporting games with multiple roles, timed phases, private communication, voting and automated game management, built for real games with real people rather than a tech demo.",
     tags: ["Next.js", "TypeScript", "Supabase", "Vercel"],
-    href: null,
+    href: "https://mafiaminds.com",
     github: null,
     caseStudyHref: "/projects/mafia",
     featured: false,
+    hidden: false,
     year: "2025: Present",
   },
   {
@@ -160,6 +177,7 @@ export const projects = [
     github: null,
     caseStudyHref: null,
     featured: false,
+    hidden: true,
     year: "2026",
   },
 ] as const;
@@ -183,7 +201,7 @@ export const experience = [
 
 export const nowBuilding = [
   "GraphOrg   Org knowledge platform · latest: page-aware AI assistant and multi-tenant org chart",
-  "Mafia   Multiplayer social-deduction platform · latest: building out the voting system and timed game phases",
+  "Mafia Minds   Multiplayer social-deduction platform · latest: building out the voting system and timed game phases",
 ] as const;
 
 export const stats = [

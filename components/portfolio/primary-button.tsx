@@ -37,8 +37,8 @@ export function PrimaryButton({
 
     if (isInternal) {
       return (
-        <motion.div whileTap={buttonTap} className="inline-flex w-full md:w-auto">
-          <Link href={href} className={`${classes} w-full`}>
+        <motion.div whileTap={buttonTap} className="inline-flex">
+          <Link href={href} className={classes}>
             {children}
           </Link>
         </motion.div>

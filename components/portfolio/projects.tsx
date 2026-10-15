@@ -2,7 +2,6 @@
 
 import { motion } from "framer-motion";
 import { ArrowRight, ArrowUpRight, Github } from "lucide-react";
-import Link from "next/link";
 import { fadeUpItem, staggerContainer, viewport } from "@/lib/motion";
 import { projects } from "@/lib/portfolio";
 import { PrimaryButton } from "./primary-button";
@@ -40,13 +39,17 @@ function LiveLink({
 }
 
 export function Projects() {
-  const featured = projects.find((p) => p.featured);
-  const others = projects.filter((p) => !p.featured);
+  const visible = projects.filter((p) => !p.hidden);
+  const featured = visible.find((p) => p.featured);
+  const others = visible.filter((p) => !p.featured);
 
   return (
     <section id="projects" className="py-24 px-6 scroll-mt-20">
       <div className="max-w-5xl mx-auto">
-        <SectionHeader title="Projects" />
+        <SectionHeader
+          label="Projects"
+          title="What I have been building"
+        />
 
         {featured && (
           <motion.div
@@ -54,24 +57,24 @@ export function Projects() {
             whileInView="visible"
             viewport={viewport}
             variants={staggerContainer}
-            className="mb-10"
+            className="mb-6"
           >
-            <FeaturedProject project={featured} />
+            <ProjectCard project={featured} size="full" />
           </motion.div>
         )}
 
         {others.length > 0 && (
-          <motion.ul
-            className="divide-y divide-border/70 border-t border-border/70"
+          <motion.div
+            className="grid gap-6 md:grid-cols-2"
             initial="hidden"
             whileInView="visible"
             viewport={viewport}
             variants={staggerContainer}
           >
             {others.map((project) => (
-              <ProjectRow key={project.title} project={project} />
+              <ProjectCard key={project.title} project={project} size="half" />
             ))}
-          </motion.ul>
+          </motion.div>
         )}
       </div>
     </section>
@@ -80,30 +83,59 @@ export function Projects() {
 
 type Project = (typeof projects)[number];
 
-function FeaturedProject({ project }: { project: Project }) {
+function ProjectCard({
+  project,
+  size,
+}: {
+  project: Project;
+  size: "full" | "half";
+}) {
   const hasCaseStudy = Boolean(project.caseStudyHref);
   const hasLive = Boolean(project.href);
   const hasGithub = Boolean(project.github);
+  const isFull = size === "full";
 
   return (
     <motion.article
       variants={fadeUpItem}
-      className="rounded-2xl border border-border/80 bg-gradient-to-br from-card/80 to-accent/5 p-6 md:p-8"
+      className={`rounded-2xl border border-border/80 bg-gradient-to-br from-card/80 to-accent/5 h-full ${
+        isFull ? "p-6 md:p-8" : "p-5 md:p-6"
+      }`}
     >
-      <div className="flex flex-col gap-6 md:flex-row md:items-start md:justify-between md:gap-10">
+      <div
+        className={
+          isFull
+            ? "flex flex-col gap-6 md:flex-row md:items-start md:justify-between md:gap-10"
+            : "flex flex-col gap-5 h-full"
+        }
+      >
         <div className="min-w-0 flex-1">
-          <h3 className="text-2xl md:text-3xl font-semibold tracking-tight text-foreground mb-3">
+          <h3
+            className={`font-semibold tracking-tight text-foreground ${
+              isFull
+                ? "text-2xl md:text-3xl mb-3"
+                : "text-xl md:text-2xl mb-2"
+            }`}
+          >
             {project.title}
           </h3>
 
-          <p className="text-sm font-medium text-accent/90 mb-2">
+          <p
+            className={`font-medium text-accent/90 ${
+              isFull ? "text-sm mb-2" : "text-xs mb-1.5"
+            }`}
+          >
             {project.subtitle}
           </p>
-          <p className="text-foreground leading-relaxed max-w-xl text-base">
+          <p
+            className={`text-foreground leading-relaxed ${
+              isFull ? "max-w-xl text-base" : "text-sm"
+            }`}
+          >
             {project.summary}
           </p>
 
-          <ul className="flex flex-wrap gap-2 mt-5">
+          <ul className={`flex flex-wrap gap-2 ${isFull ? "mt-5" : "mt-4"}`}>
             {project.tags.map((tag) => (
               <li
                 key={tag}
@@ -115,21 +147,33 @@ function FeaturedProject({ project }: { project: Project }) {
           </ul>
         </div>
 
-        <div className="flex flex-col gap-3 shrink-0 md:items-end md:pt-1">
+        <div
+          className={`flex flex-col gap-3 shrink-0 ${
+            isFull ? "md:items-end md:pt-1" : "mt-auto items-start pt-1"
+          }`}
+        >
           {hasCaseStudy && project.caseStudyHref && (
             <PrimaryButton
               href={project.caseStudyHref}
-              className="px-5 py-2.5 w-full md:w-auto"
+              className={
+                isFull
+                  ? "px-5 py-2.5 w-full md:w-auto"
+                  : "px-3 py-1.5 text-xs self-start w-auto"
+              }
             >
-              Read case study
+              Case Study
               <ArrowRight
-                className="w-4 h-4 transition-transform duration-300 ease-out group-hover:translate-x-1"
+                className={`${isFull ? "w-4 h-4" : "w-3.5 h-3.5"} transition-transform duration-300 ease-out group-hover:translate-x-1`}
                 aria-hidden
               />
             </PrimaryButton>
           )}
 
-          <div className="flex flex-wrap items-center gap-4 md:justify-end">
+          <div
+            className={`flex flex-wrap items-center gap-4 ${
+              isFull ? "md:justify-end" : "justify-start"
+            }`}
+          >
             {hasLive && project.href && <LiveLink href={project.href} />}
             {hasGithub && project.github && (
               <a
@@ -143,70 +187,14 @@ function FeaturedProject({ project }: { project: Project }) {
                 GitHub
               </a>
             )}
+            {!hasCaseStudy && !hasLive && !hasGithub && (
+              <span className="font-mono text-xs text-muted-foreground">
+                In progress
+              </span>
+            )}
           </div>
         </div>
       </div>
     </motion.article>
-  );
-}
-
-function ProjectRow({ project }: { project: Project }) {
-  const hasCaseStudy = Boolean(project.caseStudyHref);
-  const hasLive = Boolean(project.href);
-  const hasGithub = Boolean(project.github);
-
-  return (
-    <motion.li variants={fadeUpItem} className="py-6 md:py-7">
-      <div className="flex flex-col gap-4 md:flex-row md:items-start md:justify-between md:gap-10">
-        <div className="min-w-0 flex-1">
-          <h3 className="text-lg font-semibold tracking-tight text-foreground mb-1.5">
-            {project.title}
-          </h3>
-          <p className="text-sm text-foreground leading-relaxed max-w-xl">
-            {project.summary}
-          </p>
-          <ul className="flex flex-wrap gap-2 mt-3">
-            {project.tags.map((tag) => (
-              <li
-                key={tag}
-                className="inline-flex items-center rounded-md border border-border/80 bg-muted/40 px-2.5 py-1 font-mono text-xs text-foreground"
-              >
-                {tag}
-              </li>
-            ))}
-          </ul>
-        </div>
-
-        <div className="flex flex-wrap items-center gap-3 shrink-0 md:justify-end md:pt-0.5">
-          {hasCaseStudy && project.caseStudyHref && (
-            <Link
-              href={project.caseStudyHref}
-              className="inline-flex items-center gap-1.5 text-sm font-medium text-accent hover:underline underline-offset-4"
-            >
-              Case study
-              <ArrowRight className="w-3.5 h-3.5" aria-hidden />
-            </Link>
-          )}
-          {hasLive && project.href && <LiveLink href={project.href} />}
-          {hasGithub && project.github && (
-            <a
-              href={project.github}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center gap-1.5 text-sm text-muted-foreground hover:text-accent transition-colors"
-              aria-label={`${project.title} on GitHub`}
-            >
-              <Github className="w-3.5 h-3.5" aria-hidden />
-              GitHub
-            </a>
-          )}
-          {!hasCaseStudy && !hasLive && !hasGithub && (
-            <span className="font-mono text-xs text-muted-foreground">
-              In progress
-            </span>
-          )}
-        </div>
-      </div>
-    </motion.li>
   );
 }

@@ -152,7 +152,7 @@ export const caseStudies: CaseStudy[] = [
   },
   {
     slug: "mafia",
-    title: "Mafia",
+    title: "Mafia Minds",
     subtitle: "Multiplayer social-deduction platform",
     tags: [
       "Next.js",
@@ -163,8 +163,8 @@ export const caseStudies: CaseStudy[] = [
       "Supabase",
       "Vercel",
     ],
-    href: null,
-    lead: "Mafia only works when some players know things others don’t: and that asymmetry has to hold against anyone who opens DevTools.",
+    href: "https://mafiaminds.com",
+    lead: "Hidden roles only work if the server enforces them: against the UI, and against anyone who opens DevTools.",
     context: [
       {
         label: "Secrets",
@@ -225,6 +225,103 @@ export const caseStudies: CaseStudy[] = [
     ],
     takeaway:
       "Authorize at the data layer first. Clients are views that can be stale: never the source of truth.",
+  },
+  {
+    slug: "graafex",
+    title: "Graafex",
+    subtitle: "Creative studio marketing site for strategy, design and film",
+    tags: [
+      "Next.js",
+      "React",
+      "TypeScript",
+      "Tailwind CSS",
+      "Motion",
+      "Vercel",
+    ],
+    href: "https://graafex.com",
+    lead: "A film-first studio site where motion, portfolio and case studies stay fast without a CMS.",
+    context: [
+      {
+        label: "Film-heavy",
+        detail: "Hero and portfolio need video that feels premium, not sluggish.",
+      },
+      {
+        label: "Frequent updates",
+        detail: "New client work should ship without rebuilding page templates.",
+      },
+      {
+        label: "Brand presence",
+        detail: "Scroll, type and hover states have to carry the studio’s identity.",
+      },
+    ],
+    outcome:
+      "A Next.js marketing site with scroll-driven intro, hover-play portfolio grid, and data-driven case study pages for films, reels and photos.",
+    stack: [
+      {
+        label: "Web",
+        detail: "Next.js App Router, React, TypeScript",
+      },
+      {
+        label: "Style",
+        detail: "Tailwind CSS · Syne via next/font",
+      },
+      {
+        label: "Motion",
+        detail: "Motion library for scroll and hover interactions",
+      },
+      {
+        label: "Content",
+        detail: "Typed site copy and case study entries in lib/",
+      },
+      {
+        label: "Deploy",
+        detail: "Vercel",
+      },
+    ],
+    decisions: [
+      {
+        title: "Case studies as data",
+        detail: "One entry object drives the card and the detail page: video, reels, photos.",
+      },
+      {
+        title: "Film-first layout",
+        detail: "Hero and portfolio lead with video; stills and reels follow as optional sections.",
+      },
+      {
+        title: "Hover-play grid",
+        detail: "Portfolio cards preview on hover so browsing stays immersive without autoplay noise.",
+      },
+      {
+        title: "No CMS for v1",
+        detail: "Typed content files keep deploy simple while the brand and reel set settle.",
+      },
+    ],
+    friction: [
+      {
+        title: "Video formats",
+        detail: "Standardised on MP4: browsers don’t reliably play .mov.",
+      },
+      {
+        title: "Layout shift on photos",
+        detail: "Read local image sizes at build time so galleries don’t jump.",
+      },
+      {
+        title: "Placeholder content",
+        detail: "Site copy and media stay swappable from lib/ and public/ without template churn.",
+      },
+    ],
+    roadmap: [
+      {
+        title: "Real brand media",
+        detail: "Replace hero, reels and case study assets with final deliverables",
+      },
+      {
+        title: "CMS when needed",
+        detail: "Move entries to a headless CMS once update cadence demands it",
+      },
+    ],
+    takeaway:
+      "For a studio site, the template is the product: data-driven pages and careful video handling matter more than a CMS on day one.",
   },
 ];
 
