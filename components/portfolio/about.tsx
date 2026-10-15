@@ -35,7 +35,7 @@ export function About() {
             <motion.div
               key={stat.label}
               variants={scaleIn}
-              whileHover={{ y: -6, scale: 1.03 }}
+              whileHover={{ y: -6 }}
               transition={springSnappy}
               className="rounded-xl border border-border/80 bg-card/40 p-6 text-center"
             >
@@ -82,8 +82,6 @@ export function About() {
             whileInView="visible"
             viewport={viewport}
             variants={slideInRight}
-            whileHover={{ scale: 1.01 }}
-            transition={springSmooth}
             className="rounded-xl border border-accent/30 bg-accent/5 p-6"
           >
             <p className="font-mono text-xs text-accent uppercase tracking-wider mb-4">

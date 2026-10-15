@@ -1,10 +1,9 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { ArrowUpRight, FileText, Github, Star } from "lucide-react";
+import { ArrowRight, Github } from "lucide-react";
 import Link from "next/link";
 import {
-  cardHover,
   fadeUpItem,
   springSnappy,
   staggerContainer,
@@ -13,9 +12,17 @@ import {
 import { projects } from "@/lib/portfolio";
 import { SectionHeader } from "./section-header";
 
+function displayUrl(href: string) {
+  try {
+    return new URL(href).hostname;
+  } catch {
+    return href.replace(/^https?:\/\//, "");
+  }
+}
+
 export function Projects() {
-  const featured = projects.filter((p) => p.featured);
-  const other = projects.filter((p) => !p.featured);
+  const featured = projects.find((p) => p.featured);
+  const others = projects.filter((p) => !p.featured);
 
   return (
     <section id="projects" className="py-24 px-6 scroll-mt-20">
@@ -23,33 +30,33 @@ export function Projects() {
         <SectionHeader
           label="01   Projects"
           title="Selected work"
-          description="Products I'm actively building, end to end."
+          description="What I built, why it matters, and where to dig deeper."
         />
 
-        <motion.div
-          className="grid md:grid-cols-2 gap-6 mb-8"
-          initial="hidden"
-          whileInView="visible"
-          viewport={viewport}
-          variants={staggerContainer}
-        >
-          {featured.map((project, i) => (
-            <ProjectCard key={project.title} project={project} index={i} large />
-          ))}
-        </motion.div>
-
-        {other.length > 0 && (
+        {featured && (
           <motion.div
-            className="grid md:grid-cols-2 gap-6"
+            initial="hidden"
+            whileInView="visible"
+            viewport={viewport}
+            variants={staggerContainer}
+            className="mb-10"
+          >
+            <FeaturedProject project={featured} />
+          </motion.div>
+        )}
+
+        {others.length > 0 && (
+          <motion.ul
+            className="divide-y divide-border/70 border-t border-border/70"
             initial="hidden"
             whileInView="visible"
             viewport={viewport}
             variants={staggerContainer}
           >
-            {other.map((project, i) => (
-              <ProjectCard key={project.title} project={project} index={i} />
+            {others.map((project) => (
+              <ProjectRow key={project.title} project={project} />
             ))}
-          </motion.div>
+          </motion.ul>
         )}
       </div>
     </section>
@@ -58,157 +65,162 @@ export function Projects() {
 
 type Project = (typeof projects)[number];
 
-function ProjectCard({
-  project,
-  large = false,
-}: {
-  project: Project;
-  index: number;
-  large?: boolean;
-}) {
+function FeaturedProject({ project }: { project: Project }) {
+  const hasCaseStudy = Boolean(project.caseStudyHref);
+  const hasLive = Boolean(project.href);
+  const hasGithub = Boolean(project.github);
+
   return (
     <motion.article
       variants={fadeUpItem}
-      initial="rest"
-      whileHover="hover"
-      className={`group relative rounded-xl border border-border/80 bg-card/40 p-6 overflow-hidden ${
-        large ? "md:min-h-[220px] flex flex-col" : ""
-      }`}
+      className="rounded-2xl border border-border/80 bg-gradient-to-br from-card/80 to-accent/5 p-6 md:p-8"
     >
-      <div className="absolute inset-0 bg-gradient-to-br from-accent/0 via-accent/0 to-accent/8 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none rounded-xl" />
-      <motion.div
-        variants={cardHover}
-        className={`relative z-10 ${large ? "flex flex-col flex-1" : ""}`}
-      >
+      <p className="font-mono text-xs text-accent uppercase tracking-wider mb-4">
+        Featured
+      </p>
 
-        <div className="flex items-start justify-between gap-4 mb-4">
-          <div>
-            {project.featured && (
-              <motion.span
-                initial={{ opacity: 0, x: -8 }}
-                whileInView={{ opacity: 1, x: 0 }}
-                viewport={viewport}
-                className="inline-flex items-center gap-1 text-xs font-mono text-accent mb-2"
-              >
-                <Star className="w-3 h-3 fill-accent animate-pulse-soft" aria-hidden />
-                Featured
-              </motion.span>
-            )}
-            <h3 className="text-xl font-semibold group-hover:text-accent transition-colors duration-300">
+      <div className="flex flex-col gap-6 md:flex-row md:items-start md:justify-between md:gap-10">
+        <div className="min-w-0 flex-1">
+          <div className="flex flex-wrap items-baseline gap-x-4 gap-y-1 mb-3">
+            <h3 className="text-2xl md:text-3xl font-semibold tracking-tight text-foreground">
               {project.title}
             </h3>
-            {project.subtitle && (
-              <p className="text-sm text-muted-foreground mt-1">{project.subtitle}</p>
-            )}
-            <p className="text-xs text-muted-foreground font-mono mt-1">
+            <span className="font-mono text-xs text-muted-foreground">
               {project.year}
-            </p>
+            </span>
           </div>
-          <div className="flex gap-2">
-            {project.github && (
-              <motion.a
-                href={project.github}
-                target="_blank"
-                rel="noopener noreferrer"
-                whileHover={{ scale: 1.1, rotate: -6 }}
-                whileTap={{ scale: 0.95 }}
-                transition={springSnappy}
-                className="p-2 rounded-lg border border-border/60 hover:border-accent/50 hover:text-accent"
-                aria-label={`${project.title} on GitHub`}
-              >
-                <Github className="w-4 h-4" />
-              </motion.a>
-            )}
-            {project.href && (
-              <motion.a
-                href={project.href}
-                target="_blank"
-                rel="noopener noreferrer"
-                whileHover={{ scale: 1.1, rotate: 6 }}
-                whileTap={{ scale: 0.95 }}
-                transition={springSnappy}
-                className="p-2 rounded-lg border border-border/60 hover:border-accent/50 hover:text-accent"
-                aria-label={`Visit ${project.title}`}
-              >
-                <ArrowUpRight className="w-4 h-4" />
-              </motion.a>
-            )}
-          </div>
-        </div>
 
-        <p className={`text-muted-foreground leading-relaxed ${large ? "flex-1" : ""}`}>
-          {project.description}
-        </p>
+          <p className="text-sm font-medium text-accent/90 mb-2">
+            {project.subtitle}
+          </p>
+          <p className="text-muted-foreground leading-relaxed max-w-xl text-base">
+            {project.summary}
+          </p>
 
-        {"highlights" in project && project.highlights.length > 0 && (
-          <ul className="grid sm:grid-cols-2 gap-x-4 gap-y-1.5 mt-5">
-            {project.highlights.map((item) => (
-              <li
-                key={item}
-                className="flex gap-2 text-sm leading-relaxed text-muted-foreground"
-              >
-                <span
-                  className="mt-[0.55em] size-1.5 shrink-0 rounded-full bg-accent"
-                  aria-hidden
-                />
-                <span>{item}</span>
+          <ul className="flex flex-wrap gap-x-3 gap-y-1 mt-5">
+            {project.tags.map((tag) => (
+              <li key={tag} className="font-mono text-xs text-muted-foreground">
+                {tag}
               </li>
             ))}
           </ul>
-        )}
+        </div>
 
-        <ul className="flex flex-wrap gap-2 mt-6">
-          {project.tags.map((tag, ti) => (
-            <motion.li
-              key={tag}
-              initial={{ opacity: 0, scale: 0.9 }}
-              whileInView={{ opacity: 1, scale: 1 }}
-              viewport={viewport}
-              transition={{ delay: ti * 0.05 }}
-              whileHover={{ scale: 1.05, y: -2 }}
-              className="px-2.5 py-1 rounded-md bg-muted/50 font-mono text-xs text-muted-foreground hover:text-foreground hover:bg-muted/80 transition-colors"
+        <div className="flex flex-col gap-3 shrink-0 md:items-end md:pt-1">
+          {hasCaseStudy && project.caseStudyHref && (
+            <motion.div
+              whileHover={{ scale: 1.03, y: -2 }}
+              whileTap={{ scale: 0.98 }}
+              transition={springSnappy}
             >
-              {tag}
-            </motion.li>
-          ))}
-        </ul>
+              <Link
+                href={project.caseStudyHref}
+                className="inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-lg bg-accent text-accent-foreground text-sm font-medium shadow-lg shadow-accent/20 w-full md:w-auto"
+              >
+                Read case study
+                <ArrowRight className="w-4 h-4" aria-hidden />
+              </Link>
+            </motion.div>
+          )}
 
-        {("caseStudyHref" in project && project.caseStudyHref) ||
-        project.href ||
-        project.github ? (
-          <div className="flex flex-wrap gap-3 mt-6 pt-6 border-t border-border/50">
-            {project.href && (
+          <div className="flex flex-wrap items-center gap-3 md:justify-end">
+            {hasLive && project.href && (
               <a
                 href={project.href}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-sm font-medium text-foreground hover:text-accent transition-colors"
+                className="font-mono text-sm text-accent underline underline-offset-4 decoration-accent/50 hover:decoration-accent transition-colors"
               >
-                Live Demo
+                {displayUrl(project.href)}
               </a>
             )}
-            {project.github && (
+            {hasGithub && project.github && (
               <a
                 href={project.github}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-sm font-medium text-foreground hover:text-accent transition-colors"
+                className="inline-flex items-center gap-1.5 text-sm text-muted-foreground hover:text-accent transition-colors"
+                aria-label={`${project.title} on GitHub`}
               >
+                <Github className="w-3.5 h-3.5" aria-hidden />
                 GitHub
               </a>
             )}
-            {"caseStudyHref" in project && project.caseStudyHref && (
-              <Link
-                href={project.caseStudyHref}
-                className="inline-flex items-center gap-1.5 text-sm font-medium text-accent hover:underline"
-              >
-                <FileText className="w-3.5 h-3.5" aria-hidden />
-                Case Study
-              </Link>
-            )}
           </div>
-        ) : null}
-      </motion.div>
+        </div>
+      </div>
     </motion.article>
+  );
+}
+
+function ProjectRow({ project }: { project: Project }) {
+  const hasCaseStudy = Boolean(project.caseStudyHref);
+  const hasLive = Boolean(project.href);
+  const hasGithub = Boolean(project.github);
+
+  return (
+    <motion.li variants={fadeUpItem} className="py-6 md:py-7">
+      <div className="flex flex-col gap-4 md:flex-row md:items-start md:justify-between md:gap-10">
+        <div className="min-w-0 flex-1">
+          <div className="flex flex-wrap items-baseline gap-x-3 gap-y-1 mb-1.5">
+            <h3 className="text-lg font-semibold tracking-tight text-foreground">
+              {project.title}
+            </h3>
+            <span className="font-mono text-xs text-muted-foreground">
+              {project.year}
+            </span>
+          </div>
+          <p className="text-sm text-muted-foreground leading-relaxed max-w-xl">
+            {project.summary}
+          </p>
+          <ul className="flex flex-wrap gap-x-3 gap-y-1 mt-3">
+            {project.tags.map((tag) => (
+              <li key={tag} className="font-mono text-xs text-muted-foreground/80">
+                {tag}
+              </li>
+            ))}
+          </ul>
+        </div>
+
+        <div className="flex flex-wrap items-center gap-3 shrink-0 md:justify-end md:pt-0.5">
+          {hasCaseStudy && project.caseStudyHref && (
+            <Link
+              href={project.caseStudyHref}
+              className="inline-flex items-center gap-1.5 text-sm font-medium text-accent hover:underline underline-offset-4"
+            >
+              Case study
+              <ArrowRight className="w-3.5 h-3.5" aria-hidden />
+            </Link>
+          )}
+          {hasLive && project.href && (
+            <a
+              href={project.href}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="font-mono text-sm text-accent underline underline-offset-4 decoration-accent/50 hover:decoration-accent transition-colors"
+            >
+              {displayUrl(project.href)}
+            </a>
+          )}
+          {hasGithub && project.github && (
+            <a
+              href={project.github}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-1.5 text-sm text-muted-foreground hover:text-accent transition-colors"
+              aria-label={`${project.title} on GitHub`}
+            >
+              <Github className="w-3.5 h-3.5" aria-hidden />
+              GitHub
+            </a>
+          )}
+          {!hasCaseStudy && !hasLive && !hasGithub && (
+            <span className="font-mono text-xs text-muted-foreground">
+              In progress
+            </span>
+          )}
+        </div>
+      </div>
+    </motion.li>
   );
 }

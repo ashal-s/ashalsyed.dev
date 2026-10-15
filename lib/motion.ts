@@ -83,10 +83,9 @@ export const scaleIn: Variants = {
 };
 
 export const cardHover = {
-  rest: { y: 0, scale: 1 },
+  rest: { y: 0 },
   hover: {
     y: -6,
-    scale: 1.02,
     transition: springSnappy,
   },
 };

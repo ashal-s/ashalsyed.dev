@@ -39,8 +39,10 @@ function buildLlmText(): string {
 
   lines.push("## Projects");
   for (const project of projects) {
+    const link =
+      project.href ?? project.caseStudyHref ?? `https://${site.domain}`;
     lines.push(
-      `- [${project.title}](${project.href}) (${project.year}): ${project.description}`
+      `- [${project.title}](${link}) (${project.year}): ${project.summary}`
     );
   }
   lines.push("");

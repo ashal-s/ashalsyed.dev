@@ -6,7 +6,6 @@ import { useRoleTypewriter } from "@/hooks/use-role-typewriter";
 import {
   fadeUpItem,
   springSnappy,
-  springSmooth,
   staggerContainer,
 } from "@/lib/motion";
 import { roles, site, socialLinks } from "@/lib/portfolio";
@@ -32,8 +31,6 @@ export function Hero() {
       >
         <motion.div
           variants={fadeUpItem}
-          whileHover={{ scale: 1.02 }}
-          transition={springSnappy}
           className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full border border-border/80 bg-card/50 text-sm text-muted-foreground mb-8"
         >
           <span className="relative flex h-2 w-2">
@@ -45,8 +42,6 @@ export function Hero() {
 
         <motion.div
           variants={fadeUpItem}
-          whileHover={{ y: -4 }}
-          transition={springSmooth}
           className="rounded-xl border border-border/80 bg-card/40 backdrop-blur-sm overflow-hidden mb-10 shadow-2xl shadow-black/20"
         >
           <div className="flex items-center gap-2 px-4 py-3 border-b border-border/60 bg-muted/30">

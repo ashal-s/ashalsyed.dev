@@ -40,8 +40,6 @@ export function Contact() {
           whileInView="visible"
           viewport={viewport}
           variants={fadeUp}
-          whileHover={{ scale: 1.005 }}
-          transition={springSnappy}
           className="rounded-2xl border border-border/80 bg-gradient-to-br from-card/80 to-accent/5 p-8 md:p-12"
         >
           <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-8">
