@@ -3,15 +3,14 @@ export type CaseStudy = {
   title: string;
   subtitle: string;
   tags: readonly string[];
-  draft: boolean;
   href: string | null;
   /** One tight opening line. */
   lead: string;
-  /** The friction, as short labeled points — not a “Problem” essay. */
+  /** Short problem points. */
   context: readonly { label: string; detail: string }[];
   /** What shipped, in one breath. */
   outcome: string;
-  /** How the system is put together — shown as a flow, not paragraphs. */
+  /** Stack as label → tech. */
   stack: readonly { label: string; detail: string }[];
   /** Named choices with a one-liner each. */
   decisions: readonly { title: string; detail: string }[];
@@ -19,7 +18,7 @@ export type CaseStudy = {
   friction: readonly { title: string; detail: string }[];
   /** What’s next — optional. */
   roadmap?: readonly { title: string; detail: string }[];
-  /** Closing insight — pull-quote style. */
+  /** Closing insight. */
   takeaway: string;
 };
 
@@ -42,148 +41,114 @@ export const caseStudies: CaseStudy[] = [
       "Docker",
       "Vercel",
     ],
-    draft: true,
     href: "https://www.graphorg.com",
-    lead: "Org knowledge goes stale in slide decks and wikis. People ask “who owns this?” and “who reports to whom?” and get a guess.",
+    lead: "One place to review an organisation’s structure and ask a page-aware AI, answered only from the data in front of you.",
     context: [
       {
-        label: "Scattered context",
-        detail:
-          "Who is on which team, who leads a department and how the org fits together lives in docs, chat threads and people’s heads.",
+        label: "Scattered",
+        detail: "Structure lives in docs, chat threads and people’s heads.",
       },
       {
-        label: "Stale by default",
-        detail:
-          "Org charts are drawn once and drift. Nobody can say which copy is current, or who is allowed to change it.",
+        label: "Stale",
+        detail: "Org charts are drawn once, then drift with no source of truth.",
       },
       {
-        label: "Hard to hand to an AI",
-        detail:
-          "Pasting a wiki export into a chatbot leaks data it shouldn’t see and answers that don’t trace back to a record.",
+        label: "Unsafe for AI",
+        detail: "Wiki dumps leak data and don’t map back to records.",
       },
     ],
     outcome:
-      "GraphOrg is a multi-tenant web app that models people, teams and departments with relationships, renders them as an org chart, and lets each user ask an AI assistant questions about the page they’re looking at, answered only from that page’s data.",
+      "Multi-tenant org charts for people, teams and departments, plus an AI assistant scoped to the page you’re on.",
     stack: [
       {
-        label: "Web app",
-        detail:
-          "Next.js 16 (App Router), React 19 and TypeScript, with role-gated pages and a flowchart builder",
+        label: "Web",
+        detail: "Next.js, React, TypeScript · role-gated pages, flowchart builder",
       },
       {
         label: "Data",
-        detail:
-          "PostgreSQL 16 with Drizzle ORM and migrations; every query is scoped to the caller’s organisation",
+        detail: "PostgreSQL + Drizzle · every query scoped to the org",
       },
       {
-        label: "Auth & access",
-        detail:
-          "NextAuth sessions with organisation roles (viewer, editor, admin, owner) enforced in the API and queries, not just hidden in the UI",
+        label: "Auth",
+        detail: "NextAuth · viewer / editor / admin / owner enforced in API",
       },
       {
         label: "AI worker",
-        detail:
-          "A separate Python 3.12 FastAPI service using LangChain over an OpenAI-compatible API, streaming tokens over SSE",
+        detail: "FastAPI + LangChain · streams over SSE",
       },
       {
         label: "Models",
-        detail:
-          "Qwen 2.5 7B through Ollama locally; a hosted open-weights model via config, with no code change",
+        detail: "Ollama locally · hosted open-weights via config",
       },
       {
         label: "Guardrails",
-        detail:
-          "Redis rate limiter, request size budgets, capped answers and a shared-secret boundary between web and worker",
-      },
-      {
-        label: "Quality & ops",
-        detail:
-          "Jest and React Testing Library (500+ web tests) and pytest for the worker; Docker Compose for Postgres and Redis, web app deployed on Vercel",
+        detail: "Redis rate limits · size budgets · shared-secret boundary",
       },
     ],
     decisions: [
       {
-        title: "Build the context on the server",
-        detail:
-          "The browser sends only a page scope and a question. The API route builds the context from the database for the signed-in user’s organisation, so a client can’t ask about, or inject, another tenant’s data.",
+        title: "Context built on the server",
+        detail: "Client sends scope + question; API builds tenant-scoped context.",
       },
       {
-        title: "One context builder, two features",
-        detail:
-          "The “copy page context” button and the AI assistant share the same per-page builders. Context is deliberately shallow, with related records as references, and leaves out emails, credentials and photo URLs.",
+        title: "One builder, two features",
+        detail: "Copy-context and Ask AI share builders; no emails or credentials.",
       },
       {
-        title: "A separate worker, not a route handler",
-        detail:
-          "LLM calls are long-lived and streaming, and the Python ecosystem is where the tooling lives. A small FastAPI service keeps prompts and provider logic out of the web app and can scale and deploy independently.",
+        title: "Separate AI worker",
+        detail: "Streaming LLM calls live in FastAPI, not Next route handlers.",
       },
       {
-        title: "Provider-agnostic from day one",
-        detail:
-          "Local and hosted models sit behind the same OpenAI-compatible interface. The UI shows which kind answered, and development costs nothing.",
+        title: "Provider-agnostic",
+        detail: "Local and hosted models behind one OpenAI-compatible API.",
       },
       {
-        title: "Budget the prompt as a whole",
-        detail:
-          "System prompt, page data, history, question and answer share one context window. A budgeter packs them together and trims the oldest history first, so a large page can’t silently truncate itself.",
+        title: "Budget the whole prompt",
+        detail: "System, page, history and answer share one window; history trims first.",
       },
       {
-        title: "Fail open on the limiter, cap at the provider",
-        detail:
-          "If Redis is down, chat stays up and the provider’s spend limit is the backstop that protects cost without becoming a single point of failure.",
-      },
-      {
-        title: "Degrade honestly when AI isn’t set up",
-        detail:
-          "With no worker configured, the Ask AI panel explains what to deploy instead of failing with a generic error.",
+        title: "Fail honestly",
+        detail: "Redis down → chat stays up. No worker → clear setup guidance.",
       },
     ],
     friction: [
       {
-        title: "Silent context truncation",
-        detail:
-          "Ollama defaults to a 4,096-token window and drops the overflow: the model answers wrong without warning. I raised the window and derived the app’s limits from it so they change together.",
+        title: "Silent truncation",
+        detail: "Raised Ollama’s window and aligned app limits to it.",
       },
       {
-        title: "Concurrency in “primary team” rules",
-        detail:
-          "Each person has exactly one primary team or department. Concurrent edits could leave someone with none. I fixed it with ordered advisory locks taken before any mutation, and a settle step after deletes.",
+        title: "Primary-team races",
+        detail: "Advisory locks before mutations; settle step after deletes.",
       },
       {
-        title: "A Redis client that blocked the first request",
-        detail:
-          "Disabling the offline queue made the limiter reject its very first call. I added retry and connect timeout, plus tests for the Redis-down path.",
+        title: "Redis first-call fail",
+        detail: "Retry + connect timeout, with Redis-down path tests.",
       },
       {
-        title: "Stale chat state across tabs",
-        detail:
-          "On the org chart, switching tabs changed the data but kept the old conversation, mixing turns from different views. Keying the chat by page scope resets it cleanly.",
+        title: "Stale chat across tabs",
+        detail: "Key conversation state by page scope.",
       },
     ],
     roadmap: [
       {
         title: "Deploy the AI worker",
-        detail:
-          "Run it on a container host with a hosted model and a provider spend limit. Today the web app is live on Vercel and the worker runs locally.",
+        detail: "Hosted model + provider spend limit",
       },
       {
-        title: "Persistence and evaluation",
-        detail:
-          "Stored conversations, a small evaluation set including prompt-injection cases, and groundedness checks on answers.",
+        title: "Persistence & eval",
+        detail: "Stored chats, injection cases, groundedness checks",
       },
       {
         title: "Observability",
-        detail:
-          "Tracing and cost tracking for every model call, with Langfuse as the default.",
+        detail: "Tracing and cost tracking via Langfuse",
       },
       {
-        title: "Retrieval and MCP",
-        detail:
-          "pgvector search for questions that span pages, and an MCP server so external agents can query the graph under the same access rules.",
+        title: "Retrieval & MCP",
+        detail: "pgvector for cross-page Q&A; MCP under the same access rules",
       },
     ],
     takeaway:
-      "Most of the work in an AI feature isn’t the model call. It’s deciding what the model may see, bounding what it can cost, and failing clearly when it isn’t there. Keeping access control on the server and budgeting the whole prompt mattered more than any prompt trick.",
+      "Access control, prompt budgets and honest failure modes matter more than prompt tricks.",
   },
   {
     slug: "mafia",
@@ -198,77 +163,68 @@ export const caseStudies: CaseStudy[] = [
       "Supabase",
       "Vercel",
     ],
-    draft: true,
     href: null,
     lead: "Mafia only works when some players know things others don’t: and that asymmetry has to hold against anyone who opens DevTools.",
     context: [
       {
-        label: "Asymmetric information",
-        detail:
-          "Roles, private chat and night actions must stay secret for the game to work at all.",
+        label: "Secrets",
+        detail: "Roles, private chat and night actions must stay hidden.",
       },
       {
-        label: "Real games, not demos",
-        detail:
-          "Timed phases, voting and multi-round play have to stay fair over phones and desktops.",
+        label: "Real play",
+        detail: "Timed phases and voting have to stay fair on any device.",
       },
       {
         label: "Hostile clients",
-        detail:
-          "A curious player will call the API directly. Hidden UI is not access control.",
+        detail: "Hidden UI is not access control.",
       },
     ],
     outcome:
-      "A real-time multiplayer platform modelled as games, players, roles, phases, actions, votes and chats: with every privilege enforced server-side and state pushed live over Supabase.",
+      "Realtime multiplayer Mafia with server-enforced roles, phases and chat over Supabase.",
     stack: [
       {
         label: "Client",
         detail: "Next.js / React PWA on Vercel + Tailwind",
       },
       {
-        label: "Auth & realtime",
-        detail: "Supabase auth, subscriptions for state, chat and timers",
+        label: "Realtime",
+        detail: "Supabase auth + subscriptions for state, chat and timers",
       },
       {
-        label: "Data model",
-        detail: "Relational tables with FKs: not a single game-state blob",
+        label: "Data",
+        detail: "Relational tables with FKs, not a single game-state blob",
       },
       {
-        label: "Authorization",
+        label: "Authz",
         detail: "Role membership checked in queries and API handlers",
       },
     ],
     decisions: [
       {
         title: "Never trust the client",
-        detail:
-          "Roles are assigned server-side. Night actions validate role + phase before they resolve.",
+        detail: "Roles and night actions validated server-side before they resolve.",
       },
       {
         title: "Chat scoped in the query",
-        detail:
-          "Channel membership comes from a role-membership table. Wrong role → no rows, period.",
+        detail: "Wrong role → no rows. Membership comes from the database.",
       },
       {
-        title: "Hide existence, not just content",
-        detail:
-          "Players outside a restricted channel can’t enumerate that it exists.",
+        title: "Hide existence",
+        detail: "Restricted channels can’t be enumerated from outside.",
       },
     ],
     friction: [
       {
         title: "API bypass",
-        detail:
-          "Stopping a Mafia player from reading Cult chat by hitting the API meant authorization at the data layer, not the UI.",
+        detail: "Authorization at the data layer, not the UI.",
       },
       {
-        title: "Timers & simultaneous actions",
-        detail:
-          "Keeping phases in sync under latency, and resolving votes/night actions deterministically in the same window.",
+        title: "Timers & races",
+        detail: "Deterministic phase and vote resolution under latency.",
       },
     ],
     takeaway:
-      "Design authorization at the data layer first; the UI is a convenience on top. Shared realtime state needs a single server source of truth: clients are views that can be stale, and must be reconciled rather than trusted.",
+      "Authorize at the data layer first. Clients are views that can be stale: never the source of truth.",
   },
 ];
 
