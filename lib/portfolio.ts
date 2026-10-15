@@ -120,12 +120,12 @@ export const skillGroups = [
 export const projects = [
   {
     title: "GraphOrg",
-    subtitle: "Company knowledge and engineering context platform",
+    subtitle: "Organisation knowledge platform with a page-aware AI assistant",
     summary:
-      "A searchable map of an organisation's teams, services, repos, and infrastructure — so engineers stop hunting across five tools for context.",
+      "Multi-tenant org charts for people, teams and departments — plus a page-aware AI assistant that answers only from the data on the page you’re viewing.",
     description:
-      "Engineering information is spread across repositories, documentation, cloud infrastructure and project-management tools. GraphOrg connects these systems into a searchable map of an organisation, its teams, services, repositories and infrastructure, so engineers can find context without hunting through five different tools.",
-    tags: ["Next.js", "TypeScript", "PostgreSQL", "AWS"],
+      "GraphOrg is a multi-tenant web app that models people, teams and departments with relationships, renders them as an org chart, and lets each user ask an AI assistant questions about the page they’re looking at, answered only from that page’s data.",
+    tags: ["Next.js", "TypeScript", "PostgreSQL", "FastAPI", "Ollama"],
     href: "https://www.graphorg.com",
     github: null,
     caseStudyHref: "/projects/graphorg",
@@ -180,7 +180,7 @@ export const experience = [
 ] as const;
 
 export const nowBuilding = [
-  "GraphOrg   Organisational context platform · latest: wiring up the GitHub/Jira/Confluence integrations and the relationship graph",
+  "GraphOrg   Org knowledge platform · latest: page-aware AI assistant and multi-tenant org chart",
   "Mafia   Multiplayer social-deduction platform · latest: building out the voting system and timed game phases",
 ] as const;
 

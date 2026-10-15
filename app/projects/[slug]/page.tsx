@@ -148,7 +148,7 @@ export default async function CaseStudyPage({ params }: PageProps) {
           </ol>
         </div>
 
-        <div className="grid sm:grid-cols-3 gap-3 mb-14">
+        <div className="grid sm:grid-cols-2 gap-3 mb-14">
           {caseStudy.decisions.map((item) => (
             <div
               key={item.title}
@@ -185,6 +185,29 @@ export default async function CaseStudyPage({ params }: PageProps) {
             </div>
           ))}
         </div>
+
+        {caseStudy.roadmap && caseStudy.roadmap.length > 0 && (
+          <div className="mb-14 rounded-xl border border-border/70 bg-card/30 p-5 md:p-6">
+            <ul className="space-y-4">
+              {caseStudy.roadmap.map((item) => (
+                <li key={item.title} className="flex gap-3">
+                  <span
+                    className="mt-1.5 size-1.5 shrink-0 rounded-full bg-accent"
+                    aria-hidden
+                  />
+                  <div>
+                    <p className="text-sm font-medium text-foreground">
+                      {item.title}
+                    </p>
+                    <p className="text-sm text-muted-foreground mt-0.5 leading-relaxed">
+                      {item.detail}
+                    </p>
+                  </div>
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
 
         <blockquote className="border-l-2 border-accent pl-5 py-1">
           <p className="text-base md:text-lg text-foreground/90 leading-relaxed italic">
