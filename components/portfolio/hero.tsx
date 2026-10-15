@@ -13,9 +13,8 @@ import { roles, site, socialLinks } from "@/lib/portfolio";
 const terminalLines = [
   { type: "cmd" as const, text: "whoami" },
   { type: "out" as const, text: site.name, large: true },
-  { type: "cmd" as const, text: "cat role.txt" },
   { type: "role" as const },
-  { type: "cmd" as const, text: `echo "${site.tagline}"` },
+  { type: "cmd" as const, text: site.tagline },
 ];
 
 export function Hero() {
@@ -73,6 +72,7 @@ export function Hero() {
                     className="text-muted-foreground h-8 overflow-hidden"
                     aria-live="polite"
                   >
+                    <span className="text-accent">$</span>{" "}
                     <span className="text-accent">{roleText}</span>
                     <span className="cursor-blink text-accent ml-0.5">|</span>
                   </motion.p>

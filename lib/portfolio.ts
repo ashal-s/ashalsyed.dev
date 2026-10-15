@@ -3,7 +3,7 @@ export const site = {
   domain: "ashalsyed.dev",
   title: "Software Engineer",
   tagline:
-    "I build full-stack products from idea to production, working across frontend, backend, databases, infrastructure and testing.",
+    "I build software end to end: frontend, backend, databases, infrastructure, testing, and AI features.",
   email: "ashal.syed@gmail.com",
   cvUrl: "/resume/Ashal%20Resume.pdf",
   location: "Melbourne, Australia",
@@ -39,7 +39,9 @@ export const roles = [
   "Software Engineer",
   "Full-Stack Developer",
   "Building GraphOrg",
-  "Building Mafia",
+  "Building Mafia Minds",
+  "Software Engineer",
+  "Building Graafex",
 ] as const;
 
 export const about = {
