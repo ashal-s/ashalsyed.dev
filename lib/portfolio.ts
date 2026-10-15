@@ -184,14 +184,14 @@ export const projects = [
 
 export const experience = [
   {
-    period: "Sep 2025   Present",
+    period: "Sep 2025 - Present",
     role: "Software Prod & Platform Engineering Analyst",
     company: "Accenture",
     description:
       "Contributing to enterprise platform delivery for the Australian Taxation Office's PayDay Super project. Designing manual and automated test solutions, writing database queries for validation and defect investigation, and running end-to-end integration testing across interconnected services. Working closely with developers and system designers within a disciplined Azure DevOps agile framework across enterprise systems.",
   },
   {
-    period: "Jan 2024   Sep 2025",
+    period: "Jan 2024 - Sep 2025",
     role: "Software Engineer",
     company: "Webifex Labs",
     description:

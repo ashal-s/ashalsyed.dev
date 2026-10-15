@@ -29,10 +29,10 @@ export function Contact() {
   };
 
   return (
-    <section id="contact" className="py-24 px-6 scroll-mt-20 border-t border-border/40">
+    <section id="contact" className="py-24 px-6 scroll-mt-20">
       <div className="max-w-5xl mx-auto">
         <SectionHeader
-          label="07   Contact"
+          label="Contact"
           title="Interested in working together?"
           description="I'm actively looking for Software Engineering opportunities. Get in touch."
         />

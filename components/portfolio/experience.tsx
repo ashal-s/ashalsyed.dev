@@ -17,16 +17,16 @@ export function Experience() {
   return (
     <section
       id="experience"
-      className="py-24 px-6 scroll-mt-20 border-t border-border/40"
+      className="py-24 px-6 scroll-mt-20"
     >
       <div className="max-w-5xl mx-auto">
         <SectionHeader
-          label="02   Experience"
+          label="Experience"
           title="Where I've been shipping"
         />
 
         <div ref={ref} className="relative">
-          <div className="absolute left-[7px] md:left-8 top-2 bottom-2 w-px bg-border/60 overflow-hidden">
+          <div className="absolute left-[7px] top-4 bottom-4 w-px bg-border/60 overflow-hidden">
             <motion.div
               className="w-full h-full bg-gradient-to-b from-accent via-accent/60 to-transparent origin-top"
               style={{ scaleY: lineScale }}
@@ -34,7 +34,7 @@ export function Experience() {
           </div>
 
           <motion.ul
-            className="space-y-10"
+            className="space-y-28 md:space-y-36 py-4"
             initial="hidden"
             whileInView="visible"
             viewport={viewport}
@@ -44,16 +44,16 @@ export function Experience() {
               <motion.li
                 key={`${item.period}-${item.company}`}
                 variants={fadeUpItem}
-                className="relative pl-10 md:pl-14 group"
+                className="relative pl-10 md:pl-12 group pb-2"
               >
                 <motion.span
-                  className="absolute left-0 md:left-2 top-1.5 w-4 h-4 rounded-full border-2 border-accent bg-background z-10"
+                  className="absolute left-0 top-1.5 w-4 h-4 rounded-full border-2 border-accent bg-background z-10"
                   whileInView={{ scale: [0, 1.2, 1] }}
                   viewport={viewport}
                   transition={springSmooth}
                 />
                 <motion.span
-                  className="absolute left-0 md:left-2 top-1.5 w-4 h-4 rounded-full bg-accent/30 blur-md opacity-0 group-hover:opacity-100 transition-opacity"
+                  className="absolute left-0 top-1.5 w-4 h-4 rounded-full bg-accent/30 blur-md opacity-0 group-hover:opacity-100 transition-opacity"
                   aria-hidden
                 />
                 <p className="font-mono text-xs text-accent mb-1">{item.period}</p>

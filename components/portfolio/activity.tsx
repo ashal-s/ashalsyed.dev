@@ -256,10 +256,10 @@ export function Activity() {
     .join(" + ");
 
   return (
-    <section id="activity" className="py-24 px-6 scroll-mt-20 border-t border-border/40">
+    <section id="activity" className="py-24 px-6 scroll-mt-20">
       <div className="max-w-5xl mx-auto">
         <SectionHeader
-          label="03   Activity"
+          label="Activity"
           title="GitHub activity"
           description="All-time contributions, commits, issues, pull requests and reviews: plus the last 12 months on the calendar."
         />
