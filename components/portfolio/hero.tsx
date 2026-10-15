@@ -4,21 +4,38 @@ import { motion } from "framer-motion";
 import { Download, LayoutGrid } from "lucide-react";
 import { useRoleTypewriter } from "@/hooks/use-role-typewriter";
 import {
-  fadeUpItem,
-  springSnappy,
-  staggerContainer,
-} from "@/lib/motion";
+  useTerminalIntro,
+  type TerminalIntroLine,
+} from "@/hooks/use-terminal-intro";
+import { fadeUpItem, springSnappy, staggerContainer } from "@/lib/motion";
 import { roles, site, socialLinks } from "@/lib/portfolio";
+import { PrimaryButton } from "./primary-button";
+import { SecondaryButton } from "./secondary-button";
 
-const terminalLines = [
-  { type: "cmd" as const, text: "whoami" },
-  { type: "out" as const, text: site.name, large: true },
-  { type: "role" as const },
-  { type: "cmd" as const, text: site.tagline },
+const terminalLines: TerminalIntroLine[] = [
+  { type: "cmd", text: "whoami" },
+  { type: "out", text: site.name, large: true },
+  { type: "role", text: roles[0] },
+  { type: "cmd", text: site.tagline },
 ];
 
+function splitPrompt(typed: string) {
+  const dollar = typed.startsWith("$") ? "$" : "";
+  const rest = typed.startsWith("$ ")
+    ? typed.slice(2)
+    : typed.startsWith("$")
+      ? typed.slice(1)
+      : typed;
+  return { dollar, rest };
+}
+
 export function Hero() {
-  const roleText = useRoleTypewriter(roles);
+  const { visibleLines, finished, cursorLineIndex } =
+    useTerminalIntro(terminalLines);
+
+  const roleText = useRoleTypewriter(roles, { enabled: finished });
+
+  const roleLineIndex = terminalLines.findIndex((l) => l.type === "role");
 
   return (
     <section className="min-h-screen flex flex-col justify-center pt-24 pb-16 px-6">
@@ -44,7 +61,7 @@ export function Hero() {
           className="rounded-xl border border-border/80 bg-card/40 backdrop-blur-sm overflow-hidden mb-10 shadow-2xl shadow-black/20"
         >
           <div className="flex items-center gap-2 px-4 py-3 border-b border-border/60 bg-muted/30">
-            {["bg-red-500/80", "bg-amber-500/80", "bg-emerald-500/80"].map((c) => (
+            {["bg-red-500", "bg-amber-400", "bg-emerald-500"].map((c) => (
               <motion.span
                 key={c}
                 className={`w-3 h-3 rounded-full ${c}`}
@@ -57,74 +74,92 @@ export function Hero() {
               ~/welcome   zsh
             </span>
           </div>
-          <motion.div
-            className="p-6 md:p-8 font-mono text-sm md:text-base space-y-3"
-            variants={staggerContainer}
-            initial="hidden"
-            animate="visible"
-          >
-            {terminalLines.map((line, i) => {
+          <div className="p-6 md:p-8 font-mono text-sm md:text-base space-y-3">
+            {visibleLines.map(({ line, status, text }, i) => {
+              const showCursor =
+                (!finished && cursorLineIndex === i) ||
+                (finished && i === roleLineIndex);
+
               if (line.type === "role") {
+                const display =
+                  finished || status === "done"
+                    ? roleText
+                    : splitPrompt(text).rest;
+                const showDollar =
+                  finished || status === "done" || text.startsWith("$");
+
                 return (
-                  <motion.p
+                  <p
                     key="role"
-                    variants={fadeUpItem}
-                    className="text-muted-foreground h-8 overflow-hidden"
+                    className="h-8 overflow-hidden text-foreground"
                     aria-live="polite"
                   >
-                    <span className="text-accent">$</span>{" "}
-                    <span className="text-accent">{roleText}</span>
-                    <span className="cursor-blink text-accent ml-0.5">|</span>
-                  </motion.p>
+                    {showDollar && <span className="font-medium">$</span>}
+                    {showDollar ? " " : null}
+                    <span className="font-medium">{display}</span>
+                    {showCursor && (
+                      <span className="cursor-blink text-foreground ml-0.5">
+                        |
+                      </span>
+                    )}
+                  </p>
                 );
               }
+
               if (line.type === "cmd") {
+                const { dollar, rest } = splitPrompt(text);
+
                 return (
-                  <motion.p key={i} variants={fadeUpItem}>
-                    <span className="text-accent">$</span> {line.text}
-                  </motion.p>
+                  <p key={i} className="min-h-[1.5rem] text-foreground">
+                    {dollar && (
+                      <span className="text-foreground/55">$</span>
+                    )}
+                    {dollar ? " " : null}
+                    {rest}
+                    {showCursor && (
+                      <span className="cursor-blink text-foreground ml-0.5">
+                        |
+                      </span>
+                    )}
+                  </p>
                 );
               }
+
               if (line.type === "out") {
                 return (
-                  <motion.p
+                  <p
                     key={i}
-                    variants={fadeUpItem}
-                    className={`text-foreground font-semibold font-sans tracking-tight ${
+                    className={`text-signal font-semibold font-sans tracking-tight min-h-[1.75rem] md:min-h-[2rem] ${
                       line.large ? "text-lg md:text-2xl" : ""
                     }`}
                   >
-                    {line.text}
-                  </motion.p>
+                    {text}
+                    {showCursor && (
+                      <span className="cursor-blink text-foreground ml-0.5">
+                        |
+                      </span>
+                    )}
+                  </p>
                 );
               }
+
               return null;
             })}
-          </motion.div>
+          </div>
         </motion.div>
 
         <motion.div variants={fadeUpItem} className="flex flex-wrap gap-4">
-          <motion.a
-            href={site.cvUrl}
-            download="Ashal Resume.pdf"
-            whileHover={{ scale: 1.04, y: -2 }}
-            whileTap={{ scale: 0.98 }}
-            transition={springSnappy}
-            className="inline-flex items-center gap-2 px-6 py-3 rounded-lg bg-accent text-accent-foreground font-medium shadow-lg shadow-accent/20"
-          >
-            <Download className="w-4 h-4" aria-hidden />
+          <PrimaryButton href={site.cvUrl} download="Ashal Resume.pdf">
+            <Download
+              className="w-4 h-4 transition-transform duration-300 ease-out group-hover:-translate-y-0.5"
+              aria-hidden
+            />
             Resume
-          </motion.a>
-          <motion.a
-            href="#projects"
-            whileHover={{ scale: 1.04, y: -2, borderColor: "hsl(var(--accent) / 0.5)" }}
-            whileTap={{ scale: 0.98 }}
-            transition={springSnappy}
-            className="inline-flex items-center gap-2 px-6 py-3 rounded-lg border border-border bg-card/50 hover:bg-card/80"
-          >
-            <LayoutGrid className="w-4 h-4 text-accent" aria-hidden />
+          </PrimaryButton>
+          <SecondaryButton href="#projects">
+            <LayoutGrid className="w-4 h-4" aria-hidden />
             View Projects
-          </motion.a>
+          </SecondaryButton>
         </motion.div>
 
         <motion.div
@@ -139,13 +174,13 @@ export function Hero() {
               rel="noopener noreferrer"
               variants={fadeUpItem}
               custom={i}
-              whileHover={{ x: 4, color: "hsl(var(--accent))" }}
-              transition={springSnappy}
-              className="hover:text-accent"
+              className="group"
             >
               <span className="text-foreground font-medium">{link.name}</span>
               <span className="mx-2 text-border">/</span>
-              {link.handle}
+              <span className="text-muted-foreground transition-colors group-hover:text-accent">
+                {link.handle}
+              </span>
             </motion.a>
           ))}
         </motion.div>

@@ -89,3 +89,9 @@ export const cardHover = {
     transition: springSnappy,
   },
 };
+
+/** Soft press — no cartoon expand. */
+export const buttonTap = {
+  y: 1,
+  transition: { type: "spring" as const, stiffness: 400, damping: 28 },
+};

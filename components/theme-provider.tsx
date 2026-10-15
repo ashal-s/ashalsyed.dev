@@ -7,7 +7,7 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
     <NextThemesProvider
       attribute="class"
       defaultTheme="dark"
-      enableSystem
+      enableSystem={false}
       storageKey="ashal-portfolio-theme"
     >
       {children}

@@ -11,6 +11,8 @@ import {
   viewport,
 } from "@/lib/motion";
 import { site, socialLinks } from "@/lib/portfolio";
+import { PrimaryButton } from "./primary-button";
+import { SecondaryButton } from "./secondary-button";
 import { SectionHeader } from "./section-header";
 
 export function Contact() {
@@ -62,27 +64,17 @@ export function Contact() {
             </motion.div>
 
             <div className="flex flex-col sm:flex-row gap-3">
-              <motion.button
-                type="button"
-                onClick={copyEmail}
-                whileHover={{ scale: 1.03, y: -2 }}
-                whileTap={{ scale: 0.97 }}
-                transition={springSnappy}
-                className="inline-flex items-center justify-center gap-2 px-6 py-3 rounded-lg border border-border bg-card hover:border-accent/50"
-              >
+              <SecondaryButton type="button" onClick={copyEmail}>
                 <Copy className="w-4 h-4" aria-hidden />
                 {copied ? "Copied!" : "Copy email"}
-              </motion.button>
-              <motion.a
-                href={`mailto:${site.email}`}
-                whileHover={{ scale: 1.03, y: -2 }}
-                whileTap={{ scale: 0.97 }}
-                transition={springSnappy}
-                className="inline-flex items-center justify-center gap-2 px-6 py-3 rounded-lg bg-accent text-accent-foreground font-medium shadow-lg shadow-accent/20"
-              >
-                <Mail className="w-4 h-4" aria-hidden />
+              </SecondaryButton>
+              <PrimaryButton href={`mailto:${site.email}`}>
+                <Mail
+                  className="w-4 h-4 transition-transform duration-300 ease-out group-hover:-translate-y-0.5"
+                  aria-hidden
+                />
                 Send email
-              </motion.a>
+              </PrimaryButton>
             </div>
           </div>
 

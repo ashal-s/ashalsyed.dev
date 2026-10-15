@@ -6,12 +6,40 @@ const TYPE_MS = 55;
 const ERASE_MS = 32;
 const HOLD_MS = 2000;
 
-export function useRoleTypewriter(texts: readonly string[]) {
+type Options = {
+  /** When false, display stays on the first role and does not cycle. */
+  enabled?: boolean;
+};
+
+/**
+ * Cycles roles. When enabled becomes true, starts from a hold on the first
+ * role so the first change is delayed by HOLD_MS.
+ */
+export function useRoleTypewriter(
+  texts: readonly string[],
+  { enabled = true }: Options = {}
+) {
+  const first = texts[0] ?? "";
   const [index, setIndex] = useState(0);
-  const [display, setDisplay] = useState("");
-  const [phase, setPhase] = useState<"typing" | "holding" | "erasing">("typing");
+  const [display, setDisplay] = useState(first);
+  const [phase, setPhase] = useState<"typing" | "holding" | "erasing">(
+    "holding"
+  );
 
   useEffect(() => {
+    if (!enabled) {
+      setIndex(0);
+      setDisplay(first);
+      setPhase("holding");
+      return;
+    }
+    // Begin cycling from a hold on whatever is currently shown (first role).
+    setPhase("holding");
+  }, [enabled, first]);
+
+  useEffect(() => {
+    if (!enabled) return;
+
     const full = texts[index] ?? "";
     let timeout: ReturnType<typeof setTimeout>;
 
@@ -37,7 +65,7 @@ export function useRoleTypewriter(texts: readonly string[]) {
     }
 
     return () => clearTimeout(timeout);
-  }, [display, index, phase, texts]);
+  }, [display, enabled, index, phase, texts]);
 
-  return display;
+  return enabled ? display : first;
 }

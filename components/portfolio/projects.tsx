@@ -3,13 +3,9 @@
 import { motion } from "framer-motion";
 import { ArrowRight, Github } from "lucide-react";
 import Link from "next/link";
-import {
-  fadeUpItem,
-  springSnappy,
-  staggerContainer,
-  viewport,
-} from "@/lib/motion";
+import { fadeUpItem, staggerContainer, viewport } from "@/lib/motion";
 import { projects } from "@/lib/portfolio";
+import { PrimaryButton } from "./primary-button";
 import { SectionHeader } from "./section-header";
 
 function displayUrl(href: string) {
@@ -108,19 +104,16 @@ function FeaturedProject({ project }: { project: Project }) {
 
         <div className="flex flex-col gap-3 shrink-0 md:items-end md:pt-1">
           {hasCaseStudy && project.caseStudyHref && (
-            <motion.div
-              whileHover={{ scale: 1.03, y: -2 }}
-              whileTap={{ scale: 0.98 }}
-              transition={springSnappy}
+            <PrimaryButton
+              href={project.caseStudyHref}
+              className="px-5 py-2.5 w-full md:w-auto"
             >
-              <Link
-                href={project.caseStudyHref}
-                className="inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-lg bg-accent text-accent-foreground text-sm font-medium shadow-lg shadow-accent/20 w-full md:w-auto"
-              >
-                Read case study
-                <ArrowRight className="w-4 h-4" aria-hidden />
-              </Link>
-            </motion.div>
+              Read case study
+              <ArrowRight
+                className="w-4 h-4 transition-transform duration-300 ease-out group-hover:translate-x-1"
+                aria-hidden
+              />
+            </PrimaryButton>
           )}
 
           <div className="flex flex-wrap items-center gap-3 md:justify-end">

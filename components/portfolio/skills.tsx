@@ -63,7 +63,7 @@ export function Skills() {
                             ...springSmooth,
                             delay: si * 0.08,
                           }}
-                          className="h-full rounded-full bg-gradient-to-r from-accent via-accent/80 to-glow-secondary"
+                          className="h-full rounded-full bg-gradient-to-r from-signal via-accent to-glow-secondary"
                         />
                       </div>
                     </motion.li>
