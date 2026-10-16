@@ -54,7 +54,7 @@ export const about = {
   highlights: [
     {
       label: "Current role",
-      value: "Software Prod & Platform Engineering Analyst at Accenture",
+      value: "Software Prod & Platform Engineer at Accenture",
     },
     {
       label: "Background",
@@ -199,7 +199,7 @@ export const projects = [
 export const experience = [
   {
     period: "Sep 2025 - Present",
-    role: "Software Prod & Platform Engineering Analyst",
+    role: "Software Prod & Platform Engineer",
     company: "Accenture",
     description:
       "Contributing to enterprise software delivery for the Australian Taxation Office's PayDay Super project. Working across backend validation, database queries, system integration, defect investigation and end-to-end testing of interconnected services. Collaborating with developers and engineers throughout Agile delivery cycles to support system reliability and production readiness.",
@@ -210,6 +210,13 @@ export const experience = [
     company: "Webifex Labs",
     description:
       "Developed and delivered production full-stack applications for external clients, translating business requirements into scalable software solutions. Built RESTful APIs, backend services and database architectures using Node.js, Express.js, PostgreSQL and MongoDB, alongside React and Next.js interfaces. Owned features from design through deployment, including authentication, payment integrations, CI/CD workflows and production support.",
+  },
+  {
+    period: "Jan 2023 - Dec 2023",
+    role: "Systems Analyst",
+    company: "Aphex Pharma Solutions",
+    description:
+      "Oversaw day-to-day IT operations spanning hardware and software support, network connectivity, backups and infrastructure reliability. Administered the Microsoft 365 environment — including Exchange, Teams, OneDrive and email hosting — and led an IMAP migration to Microsoft 365 to improve communication reliability and scalability. Maintained the company website with regular updates, performance optimisation and content management, while developing internal tools that automated repetitive workflows. Also supported consistent brand messaging and visual identity across marketing materials and events.",
   },
 ] as const;
 
