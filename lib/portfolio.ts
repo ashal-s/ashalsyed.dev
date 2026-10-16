@@ -213,7 +213,7 @@ export const experience = [
   },
   {
     period: "Jan 2023 - Dec 2023",
-    role: "Systems Analyst",
+    role: "System Analyst",
     company: "Aphex Pharma Solutions",
     description:
       "Oversaw day-to-day IT operations spanning hardware and software support, network connectivity, backups and infrastructure reliability. Administered the Microsoft 365 environment — including Exchange, Teams, OneDrive and email hosting — and led an IMAP migration to Microsoft 365 to improve communication reliability and scalability. Maintained the company website with regular updates, performance optimisation and content management, while developing internal tools that automated repetitive workflows. Also supported consistent brand messaging and visual identity across marketing materials and events.",
