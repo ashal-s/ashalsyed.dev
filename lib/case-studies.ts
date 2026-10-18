@@ -16,7 +16,7 @@ export type CaseStudy = {
   decisions: readonly { title: string; detail: string }[];
   /** Hard parts, kept short. */
   friction: readonly { title: string; detail: string }[];
-  /** What’s next — optional. */
+  /** What’s next (optional). */
   roadmap?: readonly { title: string; detail: string }[];
   /** Closing insight. */
   takeaway: string;
@@ -26,7 +26,7 @@ export const caseStudies: CaseStudy[] = [
   {
     slug: "graphorg",
     title: "GraphOrg",
-    subtitle: "Organisation knowledge platform with a page-aware AI assistant",
+    subtitle: "Organisational knowledge & AI platform",
     tags: [
       "Next.js",
       "React",
@@ -42,23 +42,26 @@ export const caseStudies: CaseStudy[] = [
       "Vercel",
     ],
     href: "https://www.graphorg.com",
-    lead: "One place to review an organisation’s structure and ask a page-aware AI, answered only from the data in front of you.",
+    lead: "A full-stack platform that maps people, teams, software services, repositories and technical dependencies, with a context-aware AI assistant that answers from the organisational data in front of you.",
     context: [
       {
         label: "Scattered",
-        detail: "Structure lives in docs, chat threads and people’s heads.",
+        detail:
+          "Org structure, service ownership and dependencies live in docs, chat threads and people’s heads.",
       },
       {
         label: "Stale",
-        detail: "Org charts are drawn once, then drift with no source of truth.",
+        detail:
+          "Org charts and ownership maps are drawn once, then drift with no source of truth.",
       },
       {
         label: "Unsafe for AI",
-        detail: "Wiki dumps leak data and don’t map back to records.",
+        detail:
+          "Wiki dumps leak data and don’t map back to real records or access rules.",
       },
     ],
     outcome:
-      "Multi-tenant org charts for people, teams and departments, plus an AI assistant scoped to the page you’re on.",
+      "Multi-tenant models for people, teams, services and dependencies, plus a LangChain/FastAPI AI assistant with streamed responses from local and hosted LLMs, containerised with Docker for local and self-hosted setups.",
     stack: [
       {
         label: "Web",
@@ -66,7 +69,8 @@ export const caseStudies: CaseStudy[] = [
       },
       {
         label: "Data",
-        detail: "PostgreSQL + Drizzle · every query scoped to the org",
+        detail:
+          "PostgreSQL + Drizzle · people, teams, services, repos · tenant-scoped queries",
       },
       {
         label: "Auth",
@@ -81,8 +85,8 @@ export const caseStudies: CaseStudy[] = [
         detail: "Ollama locally · hosted open-weights via config",
       },
       {
-        label: "Guardrails",
-        detail: "Redis rate limits · size budgets · shared-secret boundary",
+        label: "Ops",
+        detail: "Docker for local/self-hosted · Redis rate limits · size budgets",
       },
     ],
     decisions: [
@@ -135,6 +139,11 @@ export const caseStudies: CaseStudy[] = [
         detail: "Hosted model + provider spend limit",
       },
       {
+        title: "External integrations",
+        detail:
+          "Consolidate service ownership and technical knowledge from external platforms",
+      },
+      {
         title: "Persistence & eval",
         detail: "Stored chats, injection cases, groundedness checks",
       },
@@ -148,7 +157,7 @@ export const caseStudies: CaseStudy[] = [
       },
     ],
     takeaway:
-      "Access control, prompt budgets and honest failure modes matter more than prompt tricks.",
+      "Access control, prompt budgets and honest failure modes matter more than prompt tricks, especially when organisational knowledge spans people, services and dependencies.",
   },
   {
     slug: "mafia",

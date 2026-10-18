@@ -6,11 +6,11 @@ export const metadata: Metadata = {
   metadataBase: new URL("https://AshalSyed.dev"),
   title: "Ashal Syed   Software Engineer",
   description:
-    "Portfolio of Ashal Syed, a Melbourne-based software engineer building full-stack products end to end, including GraphOrg and Mafia Minds.",
+    "Portfolio of Ashal Syed, a Melbourne-based software engineer with experience across full-stack products and enterprise platform delivery, including GraphOrg.",
   openGraph: {
     title: "Ashal Syed   Software Engineer",
     description:
-      "Building full-stack products end to end: frontend, backend, databases, infrastructure and testing.",
+      "Full-stack products, enterprise platforms, and AI-backed features, from requirements through deployment.",
     url: "https://AshalSyed.dev",
     siteName: "AshalSyed.dev",
     type: "website",

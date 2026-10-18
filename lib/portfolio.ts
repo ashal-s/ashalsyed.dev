@@ -3,7 +3,7 @@ export const site = {
   domain: "AshalSyed.dev",
   title: "Software Engineer",
   tagline:
-    "I build software end to end: frontend, backend, databases, infrastructure, testing, and AI features.",
+    "I build software end to end: full-stack products, enterprise platforms, and AI-backed features from requirements through deployment.",
   email: "ashal.syed@gmail.com",
   cvUrl: "/resume/Ashal%20Resume.pdf",
   location: "Melbourne, Australia",
@@ -50,7 +50,7 @@ export const roles = [
 
 export const about = {
   intro:
-    "I'm a software engineer based in Melbourne who likes building products end to end architecture, backend, database design, infrastructure and the UI on top. I'm especially interested in startups where engineers work close to the product and can see the impact of their work directly.",
+    "Software engineer with 3+ years across full-stack development and enterprise software delivery. Background in startup product development and enterprise systems within Agile teams, taking features from requirements through development, testing and deployment. Currently building GraphOrg, an organisational knowledge platform with AI integration capabilities.",
   highlights: [
     {
       label: "Current role",
@@ -62,7 +62,7 @@ export const about = {
     },
     {
       label: "Focus",
-      value: "Full-stack product engineering across frontend, backend, infrastructure and testing",
+      value: "Full-stack product engineering and enterprise platform delivery",
     },
   ],
 } as const;
@@ -89,8 +89,10 @@ export const skillGroups = [
     name: "Backend & Data",
     skills: [
       { name: "Node.js", level: 85 },
+      { name: "Express.js", level: 82 },
       { name: "FastAPI", level: 78 },
       { name: "PostgreSQL", level: 80 },
+      { name: "MongoDB", level: 76 },
       { name: "Supabase", level: 78 },
       { name: "Redis", level: 74 },
       { name: "REST APIs", level: 88 },
@@ -127,6 +129,7 @@ export const skillGroups = [
     skills: [
       { name: "Git", level: 90 },
       { name: "GitHub", level: 90 },
+      { name: "Azure DevOps", level: 78 },
       { name: "Figma", level: 70 },
       { name: "Jira", level: 78 },
     ],
@@ -136,12 +139,12 @@ export const skillGroups = [
 export const projects = [
   {
     title: "GraphOrg",
-    subtitle: "Organisation knowledge platform with a page-aware AI assistant",
+    subtitle: "Organisational knowledge & AI platform",
     summary:
-      "Multi-tenant org charts for people, teams and departments: plus a page-aware AI assistant that answers only from the data on the page you’re viewing.",
+      "Full-stack platform that maps organisational structures, employees, teams, software services and technical dependencies, with a context-aware AI assistant backed by LangChain and FastAPI.",
     description:
-      "GraphOrg is a multi-tenant web app that models people, teams and departments with relationships, renders them as an org chart, and lets each user ask an AI assistant questions about the page they’re looking at, answered only from that page’s data.",
-    tags: ["Python", "TypeScript", "Next.js", "PostgreSQL", "FastAPI", "Ollama"],
+      "GraphOrg maps people, teams, services, repositories and technical dependencies across an organisation. It includes backend APIs, relational data models and auth workflows, plus a context-aware AI assistant using LangChain and FastAPI with streamed responses from local and hosted LLMs, containerised with Docker for local and self-hosted setups.",
+    tags: ["Next.js", "TypeScript", "PostgreSQL", "LangChain", "FastAPI", "Ollama"],
     href: "https://www.graphorg.com",
     github: null,
     caseStudyHref: "/projects/graphorg",
@@ -202,26 +205,26 @@ export const experience = [
     role: "Software Prod & Platform Engineer",
     company: "Accenture",
     description:
-      "Contributing to enterprise software delivery for the Australian Taxation Office's PayDay Super project. Working across backend validation, database queries, system integration, defect investigation and end-to-end testing of interconnected services. Collaborating with developers and engineers throughout Agile delivery cycles to support system reliability and production readiness.",
+      "Contributing to an enterprise government platform for the Australian Taxation Office's PayDay Super program, working across interconnected systems. Collaborate with developers, system designers, testers, product owners and business analysts on system integration, issue resolution and delivery requirements. Work in a structured Agile environment (sprint planning, stand-ups, refinement and releases), analysing requirements and technical specifications to validate workflows. Support delivery workflows in Azure DevOps spanning work item tracking, defect management and release coordination.",
   },
   {
     period: "Jan 2024 - Sep 2025",
     role: "Software Engineer",
     company: "Webifex Labs",
     description:
-      "Developed and delivered production full-stack applications for external clients, translating business requirements into scalable software solutions. Built RESTful APIs, backend services and database architectures using Node.js, Express.js, PostgreSQL and MongoDB, alongside React and Next.js interfaces. Owned features from design through deployment, including authentication, payment integrations, CI/CD workflows and production support.",
+      "Delivered software products and client solutions in a fast-paced startup environment, working directly with customers to gather requirements, define scope and turn business needs into technical solutions. Owned the end-to-end SDLC from consultation and system design through development, testing, deployment and production support. Built full-stack applications with backend services, RESTful APIs, database architectures and user-facing interfaces, including authentication, payment processing and third-party integrations. Established CI/CD pipelines and automated deployment workflows, collaborating across concurrent projects with code reviews and production issue resolution.",
   },
   {
     period: "Jan 2023 - Dec 2023",
     role: "System Analyst",
     company: "Aphex Pharma Solutions",
     description:
-      "Oversaw day-to-day IT operations spanning hardware and software support, network connectivity, backups and infrastructure reliability. Administered the Microsoft 365 environment — including Exchange, Teams, OneDrive and email hosting — and led an IMAP migration to Microsoft 365 to improve communication reliability and scalability. Maintained the company website with regular updates, performance optimisation and content management, while developing internal tools that automated repetitive workflows. Also supported consistent brand messaging and visual identity across marketing materials and events.",
+      "Oversaw daily IT operations including hardware and software troubleshooting, network connectivity, data backups and infrastructure reliability. Maintained company websites and internal infrastructure to support business operations. Administered the Microsoft 365 environment (Exchange, Teams, OneDrive and email hosting) with a focus on functionality, security and compliance.",
   },
 ] as const;
 
 export const nowBuilding = [
-  "GraphOrg   Org knowledge platform · latest: page-aware AI assistant and multi-tenant org chart",
+  "GraphOrg   Organisational knowledge & AI platform · latest: LangChain/FastAPI assistant and org dependency mapping",
   "Graafex   Creative studio marketing site · latest: film-first portfolio and data-driven case studies",
   "Mafia Minds   Multiplayer social-deduction platform · latest: building out the voting system and timed game phases",
 ] as const;
@@ -241,6 +244,6 @@ export const education = [
 ] as const;
 
 export const certifications = [
-  "Reinvention with Agentic AI",
-  "ICAgile Fundamentals",
+  "Reinvention with Agentic AI, Accenture",
+  "ICAgile Fundamentals, International Consortium for Agile",
 ] as const;

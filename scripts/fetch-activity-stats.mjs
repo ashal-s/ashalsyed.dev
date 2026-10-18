@@ -8,8 +8,8 @@
  * Totals are summed year-by-year from account creation (all-time).
  * The contribution calendar is the last 12 months (GitHub API max per query).
  *
- * Linear: LINEAR_API_KEY — created / closed / open / bugs / teams (spaces).
- * Jira: JIRA_BASE_URL, JIRA_EMAIL, JIRA_API_TOKEN — same issue counters + projects.
+ * Linear: LINEAR_API_KEY: created / closed / open / bugs / teams (spaces).
+ * Jira: JIRA_BASE_URL, JIRA_EMAIL, JIRA_API_TOKEN: same issue counters + projects.
  *
  * Without GH_STATS_TOKEN, keeps the existing data/activity-stats.json fallback
  * (or writes an empty GitHub stub) so local builds still succeed.
@@ -189,7 +189,7 @@ async function linearGraphql(query, variables = {}) {
   return json.data;
 }
 
-/** Linear IssueConnection has no totalCount — paginate id-only pages. */
+/** Linear IssueConnection has no totalCount: paginate id-only pages. */
 async function countLinearIssues(filter, { pageSize = 50, maxPages = 100 } = {}) {
   let after = null;
   let total = 0;
@@ -458,7 +458,7 @@ async function main() {
     const existing = await loadExisting();
     if (existing?.github?.calendar?.weeks?.length) {
       console.warn(
-        "[activity-stats] No GH_STATS_TOKEN — keeping existing data/activity-stats.json"
+        "[activity-stats] No GH_STATS_TOKEN: keeping existing data/activity-stats.json"
       );
       const next = {
         ...existing,
@@ -470,7 +470,7 @@ async function main() {
       return;
     }
     console.warn(
-      "[activity-stats] No GH_STATS_TOKEN — writing empty GitHub stub"
+      "[activity-stats] No GH_STATS_TOKEN: writing empty GitHub stub"
     );
     github = emptyGithub(GITHUB_LOGIN, toIso, toIso);
   } else {
